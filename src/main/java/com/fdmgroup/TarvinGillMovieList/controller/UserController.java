@@ -1,6 +1,7 @@
 package com.fdmgroup.TarvinGillMovieList.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,19 +31,17 @@ private UserService userService;
 	}
 	
 	@GetMapping("users/{userId}")
-	public User findById(@PathVariable int userId) {
+	public Optional<User> getUserById(@PathVariable int userId) {
 		return userService.findById(userId);
 	}
 	
 	@PostMapping("users")
-	public void createNew(@RequestBody User newUser) {
-		System.out.println(newUser);
+	public void addUser(@RequestBody User newUser) {
 		userService.save(newUser);
 	}
 	
 	@PutMapping("users")
 	public void updateUser(@RequestBody User newUser) {
-		System.out.println(newUser);
 		userService.update(newUser);
 	}
 

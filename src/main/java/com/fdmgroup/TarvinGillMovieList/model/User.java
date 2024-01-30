@@ -11,8 +11,11 @@ public class User {
 	@GeneratedValue
 	@Column(name = "user_id", nullable=false, unique=true)
 	private int userId;
+	@Column(nullable = false)
 	private String email;
+	@Column(nullable = false)
 	private String username;
+	@Column(nullable = false)
 	private String password;
 	
 	/**
