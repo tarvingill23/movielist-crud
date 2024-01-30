@@ -56,17 +56,11 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	public void findById_returns_correct_user() {
-		
-		Optional<User> user1 = Optional.of(new User("johndoe@gmail.com", "johndoe9812", "password123"));
-		int userId = 1;
-		when(userService.findById(userId)).thenReturn(user1);
-		
-		Optional<User> foundUser = userService.findById(userId);
-		assertEquals(foundUser, user1);
-		verify(userRepository, times(1)).findById(userId);
+	public void add_new_user() {
+		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
+		userService.save(user1);
+		verify(userRepository, times(1)).save(user1);
 	}
-	
 	
 	@Test
 	public void update_user_throws_exception_if_id_does_not_exist() {
@@ -78,6 +72,17 @@ public class UserServiceTest {
 		});
 
 		assertEquals("No user exists with ID: " + user1.getUserId(), exception.getMessage());
+	}
+	
+	@Test
+	public void delete_user_throws_exception_if_id_does_not_exist() {
+		User user1 = new User("johndoe@gmail.com", "johndoe9812", "password123");
+		user1.setUserId(1);
 
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			userService.deleteById(user1.getUserId());
+		});
+
+		assertEquals("No user exists with ID: " + user1.getUserId(), exception.getMessage());
 	}
 }

@@ -307,6 +307,7 @@ public class DataLoader implements ApplicationRunner{
 
 		movie10.setDirectors(Arrays.asList(dir10));
 		movie10.setActors(Arrays.asList(actor7, actor19));
+		
 		personnelRepo.saveAll(personnel);
 		actorRepo.saveAll(actors);
 		directorRepo.saveAll(directors);
