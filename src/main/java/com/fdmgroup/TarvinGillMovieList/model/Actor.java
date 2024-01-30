@@ -20,9 +20,6 @@ public class Actor {
 	@JoinColumn(name="fk_personnel_id")
 	private Personnel personnel;
 	
-	@ManyToMany(mappedBy = "actors")
-	private List<Movie> movies;
-	
 	
 	public int getActorId() {
 		return actorId;

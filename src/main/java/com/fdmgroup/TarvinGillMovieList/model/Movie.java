@@ -2,6 +2,9 @@ package com.fdmgroup.TarvinGillMovieList.model;
 
 import java.sql.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,9 +33,7 @@ public class Movie {
 	@Column(nullable = false)
 	private String genre;
 	private String posterImage; // will have placeholder image for those that dont have a provided image
-	
-	@ManyToMany(mappedBy= "movies")
-	private List<MovieList> movieList;
+
 	
 	@ManyToMany
 	@JoinTable(name = "Movie_Director", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))
@@ -129,14 +130,6 @@ public class Movie {
 		this.posterImage = posterImage;
 	}
 	
-
-	public List<MovieList> getMovieList() {
-		return movieList;
-	}
-	
-	public void setMovieList(List<MovieList> movieList) {
-		this.movieList = movieList;
-	}
 	public void setDirectors(List<Director> directors) {
 		this.directors = directors;
 	}
@@ -155,6 +148,7 @@ public class Movie {
 	@Override
 	public String toString() {
 		return "Movie [movieId=" + movieId + ", title=" + title + ", releaseDate=" + releaseDate + ", runtime="
-				+ runtime + ", description=" + description + ", rating=" + rating + ", genre=" + genre + "]";
+				+ runtime + ", description=" + description + ", rating=" + rating + ", genre=" + genre
+				+ ", posterImage=" + posterImage + ", directors=" + directors + ", actors=" + actors + "]";
 	}
 }

@@ -22,9 +22,6 @@ public class Director {
 	@JoinColumn(name="fk_personnel_id")
 	private Personnel personnel;
 	
-	@ManyToMany(mappedBy = "directors")
-	private List<Movie> movies;
-	
 	public Director(Personnel personnel) {
 		super();
 		this.personnel = personnel;
