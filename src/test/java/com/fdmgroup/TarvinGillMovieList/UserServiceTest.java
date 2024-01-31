@@ -40,7 +40,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void find_all_users() {
+	public void get_all_users() {
 		List<User> users = new ArrayList<User>();
 		users.add(new User("tarvingill23@gmail,com", "tarvingill23", "password123"));
 		users.add(new User("juliexiong17@gmail.com", "juliexiong17", "password12"));
@@ -53,6 +53,18 @@ public class UserServiceTest {
 		assertEquals(foundUsers, users);
 		verify(userRepository, times(1)).findAll();
 
+	}
+	
+	@Test
+	public void get_user_by_id_throws_exception_if_user_does_not_exist() {
+		int userId = 1;
+		
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			userService.findById(userId);
+		});
+		
+		assertEquals("User with ID: " + userId + " not found", exception.getMessage());
+		
 	}
 	
 	@Test
