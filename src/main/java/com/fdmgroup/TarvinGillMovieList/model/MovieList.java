@@ -3,6 +3,9 @@ package com.fdmgroup.TarvinGillMovieList.model;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
+
+import org.hibernate.annotations.Immutable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +26,7 @@ public class MovieList {
 	private int listId;
 	@Column(nullable = false)
 	private String title;
+	@Immutable
 	@Column(name = "date_created", nullable = false)
 	private Date dateCreated;
 	@Column(name = "date_modified", nullable=false)
