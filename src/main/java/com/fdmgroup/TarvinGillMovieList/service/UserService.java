@@ -36,14 +36,14 @@ public class UserService {
 			throw new RuntimeException(
 					"User with ID: " + newUser.getUserId() + " exists, please update correctly using a PUT method");
 		}
-		this.userRepository.save(newUser);
+		this.userRepository.save(newUser); 
 	}
 
 	public void update(User newUser) {
 		if (userRepository.existsById(newUser.getUserId())) {
 			this.userRepository.save(newUser);
 		} else {
-			throw new RuntimeException("No user exists with ID: " + newUser.getUserId());
+			throw new RuntimeException("User with ID: " + newUser.getUserId() + " not found");
 		}
 	}
 
@@ -51,7 +51,7 @@ public class UserService {
 		if (userRepository.existsById(userId)) {
 			this.userRepository.deleteById(userId);
 		} else {
-			throw new RuntimeException("No user exists with ID: " + userId);
+			throw new RuntimeException("User with ID: " + userId + " not found");
 		}
 	}
 }

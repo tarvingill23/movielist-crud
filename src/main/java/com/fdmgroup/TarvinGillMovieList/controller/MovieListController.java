@@ -23,7 +23,7 @@ public class MovieListController {
 	@Autowired
 	public MovieListController(MovieListService mlService) {
 		super();
-		this.mlService = mlService;
+		this.mlService = mlService; 
 	}
 
 	@GetMapping("movielists")

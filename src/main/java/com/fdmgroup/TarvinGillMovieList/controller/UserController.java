@@ -22,7 +22,7 @@ private UserService userService;
 	@Autowired
 	public UserController(UserService userService) {
 		super();
-		this.userService = userService;
+		this.userService = userService; 
 	}
 	
 	@GetMapping("users")
