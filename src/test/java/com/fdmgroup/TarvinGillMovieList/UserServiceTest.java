@@ -26,13 +26,8 @@ public class UserServiceTest {
 	@Mock
 	UserRepository userRepository;
 
-	UserService userService;
-
 	@Autowired
-	public UserServiceTest(UserService userService) {
-		super();
-		this.userService = userService;
-	}
+	UserService userService;
 
 	@BeforeEach
 	public void setup() {
@@ -40,12 +35,12 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void get_all_users() {
+	public void findAll_users_return_2_users() {
 		List<User> users = new ArrayList<User>();
 		users.add(new User("tarvingill23@gmail,com", "tarvingill23", "password123"));
 		users.add(new User("juliexiong17@gmail.com", "juliexiong17", "password12"));
 
-		when(userService.findAll()).thenReturn(users);
+		when(userRepository.findAll()).thenReturn(users); 
 
 		List<User> foundUsers = new ArrayList<User>();
 		foundUsers = userService.findAll();
@@ -54,28 +49,73 @@ public class UserServiceTest {
 		verify(userRepository, times(1)).findAll();
 
 	}
-	
+
 	@Test
-	public void get_user_by_id_throws_exception_if_user_does_not_exist() {
+	public void findById() {
+		Optional<User> user1 = Optional.of(new User("johndoe@gmail.com", "johndoe23", "password123"));
 		int userId = 1;
-		
+
+		when(userRepository.existsById(userId)).thenReturn(true);
+
+		when(userRepository.findById(userId)).thenReturn(user1);
+
+		Optional<User> foundUser = userService.findById(userId);
+
+		assertEquals(foundUser, user1);
+
+		verify(userRepository, times(1)).findById(userId);
+	}
+
+	@Test
+	public void findById_throws_exception_if_user_does_not_exist() {
+		int userId = 1;
+		when(userRepository.existsById(userId)).thenReturn(false);
+
 		Throwable exception = assertThrows(RuntimeException.class, () -> {
 			userService.findById(userId);
 		});
-		
+
 		assertEquals("User with ID: " + userId + " not found", exception.getMessage());
-		
+
 	}
-	
+
 	@Test
 	public void add_new_user() {
 		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
 		userService.save(user1);
 		verify(userRepository, times(1)).save(user1);
 	}
-	
+
+	@Test
+	public void update_user() {
+		User originalUser = new User("johndoe@gmail.com", "johndoe9812", "password123");
+		originalUser.setUserId(1);
+
+		User updatedUser = new User("johndoe@gmail.com", "updatedTestUserName", "password123");
+		updatedUser.setUserId(1);
+		
+		// Pretend that the original user exists in the database
+		when(userRepository.existsById(originalUser.getUserId())).thenReturn(true);
+		
+
+		userService.update(updatedUser);
+		
+		verify(userRepository, times(1)).save(updatedUser);
+		
+		
+		// Get the original user
+		when(userRepository.findById(originalUser.getUserId())).thenReturn(Optional.of(updatedUser));
+		
+		Optional<User> foundUser = userService.findById(originalUser.getUserId());
+		
+		// Check the user has been updated
+		assertEquals(foundUser, Optional.of(updatedUser));
+		assertEquals("updatedTestUserName", updatedUser.getUsername());
+	}
+
 	@Test
 	public void update_user_throws_exception_if_id_does_not_exist() {
+		// user which is not persisted in the database
 		User user1 = new User("johndoe@gmail.com", "johndoe9812", "password123");
 		user1.setUserId(1);
 
@@ -83,9 +123,27 @@ public class UserServiceTest {
 			userService.update(user1);
 		});
 
-		assertEquals("No user exists with ID: " + user1.getUserId(), exception.getMessage());
+		assertEquals("User with ID: " + user1.getUserId() + " not found", exception.getMessage());
 	}
+
+	@Test
+	public void delete_user_by_id() {
+
+		Optional<User> user1 = Optional.of(new User("johndoe@gmail.com", "johndoe23", "password123"));
+		int userId = 1;
 	
+		// Assume that the user exists in the database
+		when(userRepository.existsById(userId)).thenReturn(true);
+		
+		userService.deleteById(userId);
+		
+		// Find the user by id
+		user1 = userService.findById(userId);
+		assertEquals(false, user1.isPresent());
+		
+		verify(userRepository, times(1)).deleteById(userId);
+	}
+
 	@Test
 	public void delete_user_throws_exception_if_id_does_not_exist() {
 		User user1 = new User("johndoe@gmail.com", "johndoe9812", "password123");
@@ -95,6 +153,6 @@ public class UserServiceTest {
 			userService.deleteById(user1.getUserId());
 		});
 
-		assertEquals("No user exists with ID: " + user1.getUserId(), exception.getMessage());
+		assertEquals("User with ID: " + user1.getUserId() + " not found", exception.getMessage());
 	}
 }

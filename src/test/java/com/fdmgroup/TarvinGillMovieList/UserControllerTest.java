@@ -25,16 +25,11 @@ class UserControllerTest {
 	@Mock 
 	UserService userService;
 	
-	UserController userController;
-	
 	@Autowired
-	public UserControllerTest(UserController userController) {
-		super();
-		this.userController = userController;
-	}
+	UserController userController;
 
 	@BeforeEach
-	public void setup() {
+	public void setup() { 
 		userController = new UserController(userService);
 	}
 	
@@ -44,7 +39,7 @@ class UserControllerTest {
 		List<User> users = new ArrayList<User>();
 		users.add(new User("tarvingill23@gmail,com", "tarvingill23", "password123"));
 		users.add(new User("juliexiong17@gmail.com", "juliexiong17", "password12"));
-		when(userController.getAllUsers()).thenReturn(users);
+		when(userService.findAll()).thenReturn(users);
 		
 		List<User> foundUsers = userController.getAllUsers();
 		
@@ -57,7 +52,7 @@ class UserControllerTest {
 	public void getAllUserById_returns_correct_user() {
 		int userId = 1;
 		Optional<User> user1 = Optional.of(new User("tarvingill23@gmail,com", "tarvingill23", "password123"));
-		when(userController.getUserById(userId)).thenReturn(user1);
+		when(userService.findById(userId)).thenReturn(user1);
 		
 		Optional<User> foundUser = userController.getUserById(userId);
 		
