@@ -1,18 +1,14 @@
 package com.fdmgroup.TarvinGillMovieList.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Director {
-
 	@Id
 	@GeneratedValue
 	@Column(name = "director_id", nullable=false, unique=true)
@@ -21,6 +17,10 @@ public class Director {
 	@OneToOne
 	@JoinColumn(name="fk_personnel_id")
 	private Personnel personnel;
+	
+	/**
+	 * CONSTRUCTORS
+	 */
 	
 	public Director(Personnel personnel) {
 		super();
@@ -31,6 +31,10 @@ public class Director {
 		super();
 	}
 	
+
+	/**
+	 * GETTERS AND SETTERS
+	 */
 	public Personnel getPersonnel() {
 		return personnel;
 	}
@@ -46,6 +50,11 @@ public class Director {
 	public void setDirId(int dirId) {
 		this.dirId = dirId;
 	}
+	
+	/**
+	 * TO STRING METHOD
+	 */
+
 
 	@Override
 	public String toString() {

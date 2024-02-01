@@ -3,8 +3,7 @@ package com.fdmgroup.TarvinGillMovieList.model;
 import java.sql.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +33,9 @@ public class Movie {
 	private String genre;
 	private String posterImage; // will have placeholder image for those that dont have a provided image
 
+	// allows propogation of operations from parent to child
+	@ManyToMany(mappedBy="movies", cascade= CascadeType.ALL)
+	List<MovieList> movieLists;
 	
 	@ManyToMany
 	@JoinTable(name = "Movie_Director", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))

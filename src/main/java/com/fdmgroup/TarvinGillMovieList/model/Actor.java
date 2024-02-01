@@ -1,14 +1,12 @@
 package com.fdmgroup.TarvinGillMovieList.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
+
 @Entity
 public class Actor {
 	@Id
@@ -20,7 +18,21 @@ public class Actor {
 	@JoinColumn(name="fk_personnel_id")
 	private Personnel personnel;
 	
+	/**
+	 * CONSTRUCTORS
+	 */
+	public Actor(Personnel personnel) {
+		super();
+		this.personnel = personnel;
+	}
+
+	public Actor() {
+		super();
+	}
 	
+	/**
+	 * GETTERS AND SETTERS
+	 */
 	public int getActorId() {
 		return actorId;
 	}
@@ -37,14 +49,9 @@ public class Actor {
 		this.personnel = personnel;
 	}
 	
-	public Actor(Personnel personnel) {
-		super();
-		this.personnel = personnel;
-	}
-
-	public Actor() {
-		super();
-	}
+	/**
+	 * TO STRING METHOD
+	 */
 
 	@Override
 	public String toString() {

@@ -1,9 +1,13 @@
 package com.fdmgroup.TarvinGillMovieList.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -17,6 +21,9 @@ public class User {
 	private String username;
 	@Column(nullable = false)
 	private String password;
+	
+	@OneToMany(mappedBy="user", cascade= CascadeType.ALL)
+	private List<MovieList> movielists;
 	
 	/**
 	 * GETTERS AND SETTERS
