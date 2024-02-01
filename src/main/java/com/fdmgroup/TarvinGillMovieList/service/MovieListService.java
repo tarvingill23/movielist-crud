@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
 
 @Service
@@ -28,13 +29,13 @@ public class MovieListService {
 		if (mvRepo.existsById(listId)) {
 			return this.mvRepo.findById(listId);
 		} else {
-			throw new RuntimeException("Movie list with ID: " + listId + " not found");
+			throw new NotFoundException("Movie list with ID: " + listId + " not found");
 		}
 	}
 
 	public void createList(MovieList mvList) {
 		if (mvRepo.existsById(mvList.getListId())) {
-			throw new RuntimeException("Movie list with ID: " + mvList.getListId()
+			throw new NotFoundException("Movie list with ID: " + mvList.getListId()
 					+ " exists, please update correctly using a PUT method");
 		}
 
@@ -48,7 +49,7 @@ public class MovieListService {
 		if (mvRepo.existsById(mvList.getListId())) {
 			this.mvRepo.save(mvList);
 		} else {
-			throw new RuntimeException("Movie list with ID: " + mvList.getListId() + " not found");
+			throw new NotFoundException("Movie list with ID: " + mvList.getListId() + " not found");
 		}
 	}
 
@@ -56,7 +57,7 @@ public class MovieListService {
 		if (mvRepo.existsById(listId)) {
 			this.mvRepo.deleteById(listId);
 		} else {
-			throw new RuntimeException("Movie list with ID: " + listId + " not found");
+			throw new NotFoundException("Movie list with ID: " + listId + " not found");
 		}
 	}
 

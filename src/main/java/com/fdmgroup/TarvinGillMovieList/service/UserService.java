@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.User;
 
 @Service
@@ -27,13 +28,13 @@ public class UserService {
 		if (userRepository.existsById(userId)) {
 			return this.userRepository.findById(userId);
 		} else {
-			throw new RuntimeException("User with ID: " + userId + " not found");
+			throw new NotFoundException("User with ID: " + userId + " not found");
 		}
 	}
 
 	public void save(User newUser) {
 		if (userRepository.existsById(newUser.getUserId())) {
-			throw new RuntimeException(
+			throw new NotFoundException(
 					"User with ID: " + newUser.getUserId() + " exists, please update correctly using a PUT method");
 		}
 		this.userRepository.save(newUser); 
@@ -43,7 +44,7 @@ public class UserService {
 		if (userRepository.existsById(newUser.getUserId())) {
 			this.userRepository.save(newUser);
 		} else {
-			throw new RuntimeException("User with ID: " + newUser.getUserId() + " not found");
+			throw new NotFoundException("User with ID: " + newUser.getUserId() + " not found");
 		}
 	}
 
@@ -51,7 +52,7 @@ public class UserService {
 		if (userRepository.existsById(userId)) {
 			this.userRepository.deleteById(userId);
 		} else {
-			throw new RuntimeException("User with ID: " + userId + " not found");
+			throw new NotFoundException("User with ID: " + userId + " not found");
 		}
 	}
 }

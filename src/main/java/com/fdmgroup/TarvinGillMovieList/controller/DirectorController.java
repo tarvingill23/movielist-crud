@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.TarvinGillMovieList.model.Director;
-import com.fdmgroup.TarvinGillMovieList.model.Personnel;
 import com.fdmgroup.TarvinGillMovieList.service.DirectorService;
 
 @RestController
