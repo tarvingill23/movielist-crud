@@ -3,16 +3,17 @@ package com.fdmgroup.TarvinGillMovieList.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.DirectorRepository;
-import com.fdmgroup.TarvinGillMovieList.model.Actor;
 import com.fdmgroup.TarvinGillMovieList.model.Director;
 
 @Service
 public class DirectorService {
 	private DirectorRepository directorRepo;
 
+	@Autowired
 	public DirectorService(DirectorRepository directorRepo) {
 		super();
 		this.directorRepo = directorRepo;
@@ -44,10 +45,19 @@ public class DirectorService {
 		throw new RuntimeException("Cannot update directors");
 	}
 
-	public void deleteDirectorById(int dirId) {
+//	public void deleteDirectorById(int dirId) {
+//		if (directorRepo.existsById(dirId)) {
+//			System.out.println("Ran");
+//			this.directorRepo.deleteById(dirId);
+//			System.out.println("Ran2");
+//		} else {
+//			throw new RuntimeException("Director with ID: " + dirId + " not found");
+//		}
+//	}
+	
+	public void deleteByDirId(int dirId) {
 		if (directorRepo.existsById(dirId)) {
-			this.directorRepo.deleteById(dirId);
-
+			directorRepo.deleteByDirId(dirId);
 		} else {
 			throw new RuntimeException("Director with ID: " + dirId + " not found");
 		}

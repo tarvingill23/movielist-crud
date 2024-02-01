@@ -45,8 +45,13 @@ public class ActorController {
 		actorService.updateActor(actor);
 	}
 
+//	@DeleteMapping ("actors/{actorId}") 
+//	public void deleteActorById(@PathVariable int actorId) {
+//		actorService.deleteActorById(actorId);
+//	}
+	
 	@DeleteMapping ("actors/{actorId}") 
 	public void deleteActorById(@PathVariable int actorId) {
-		actorService.deleteActorById(actorId);
+		actorService.deleteByActorId(actorId);
 	}
 }

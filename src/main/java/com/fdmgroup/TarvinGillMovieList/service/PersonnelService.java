@@ -3,6 +3,7 @@ package com.fdmgroup.TarvinGillMovieList.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.PersonnelRepository;
@@ -11,7 +12,8 @@ import com.fdmgroup.TarvinGillMovieList.model.Personnel;
 @Service
 public class PersonnelService {
 	private PersonnelRepository personnelRepo;
-
+	
+	@Autowired
 	public PersonnelService(PersonnelRepository personnelRepo) {
 		super();
 		this.personnelRepo = personnelRepo;

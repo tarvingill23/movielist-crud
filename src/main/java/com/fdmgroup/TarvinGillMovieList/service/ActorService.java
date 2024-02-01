@@ -3,6 +3,7 @@ package com.fdmgroup.TarvinGillMovieList.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.ActorRepository;
@@ -11,7 +12,8 @@ import com.fdmgroup.TarvinGillMovieList.model.Actor;
 @Service
 public class ActorService {
 	private ActorRepository actorRepo;
-
+	
+	@Autowired
 	public ActorService(ActorRepository actorRepo) {
 		super();
 		this.actorRepo = actorRepo;
@@ -42,12 +44,21 @@ public class ActorService {
 			throw new RuntimeException("Cannot update actors");
 	}
 	
-	public void deleteActorById(int actorId) {
+//	public void deleteActorById(int actorId) {
+//		if (actorRepo.existsById(actorId)) {
+//			this.actorRepo.deleteById(actorId);
+//			
+//		} else {
+//			throw new RuntimeException("Actor with ID: " + actorId + " not found");
+//		}
+//	}
+	
+	public void deleteByActorId(int actorId) {
 		if (actorRepo.existsById(actorId)) {
-			this.actorRepo.deleteById(actorId);
-			
+			actorRepo.deleteByActorId(actorId);
 		} else {
-			throw new RuntimeException("Actor with ID: " + actorId + " not found");
+			throw new RuntimeException("Director with ID: " + actorId + " not found");
 		}
 	}
+	
 }

@@ -1,9 +1,11 @@
 package com.fdmgroup.TarvinGillMovieList.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Personnel {
@@ -18,7 +20,13 @@ public class Personnel {
 	private String middleName;
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
-
+	
+	@OneToOne(mappedBy="personnel", cascade=CascadeType.ALL)
+	private Actor actor;
+	
+	@OneToOne(mappedBy="personnel", cascade=CascadeType.ALL)
+	private Director director;
+	
 	/**
 	 * CONSTRUCTORS
 	 */
