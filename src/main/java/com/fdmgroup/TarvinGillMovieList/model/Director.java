@@ -39,6 +39,14 @@ public class Director {
 		this.personnel = personnel;
 	}
 
+	public int getDirId() {
+		return dirId;
+	}
+
+	public void setDirId(int dirId) {
+		this.dirId = dirId;
+	}
+
 	@Override
 	public String toString() {
 		return "Director [dirId=" + dirId + ", personnel=" + personnel + "]";
