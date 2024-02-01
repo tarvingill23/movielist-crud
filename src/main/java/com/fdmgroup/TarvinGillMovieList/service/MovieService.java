@@ -27,13 +27,13 @@ public class MovieService {
 		if (this.movieRepo.existsById(movieId)) {
 			return this.movieRepo.findById(movieId);
 		} else {
-			throw new RuntimeException("Movie with ID: " + movieId + " not found");
+			throw new NotFoundException("Movie with ID: " + movieId + " not found");
 		}
 	}
 
 	public void addMovie(Movie movie) {
 		if (this.movieRepo.existsById(movie.getMovieId())) {
-			throw new RuntimeException("Movie with ID: " + movie.getMovieId()
+			throw new NotFoundException("Movie with ID: " + movie.getMovieId()
 					+ " already exists, please update correctly using the PUT method");
 		} else {
 			this.movieRepo.save(movie);
@@ -45,7 +45,7 @@ public class MovieService {
 			this.movieRepo.save(movie);
 
 		} else {
-			throw new RuntimeException("Movie with ID: " + movie.getMovieId() + " not found");
+			throw new NotFoundException("Movie with ID: " + movie.getMovieId() + " not found");
 		}
 	}
 
@@ -53,7 +53,7 @@ public class MovieService {
 		if (this.movieRepo.existsById(movieId)) {
 			this.movieRepo.deleteById(movieId);
 		} else {
-			throw new RuntimeException("Movie with ID: " + movieId + " not found");
+			throw new NotFoundException("Movie with ID: " + movieId + " not found");
 		}
 	}
 }

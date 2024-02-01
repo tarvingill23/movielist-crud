@@ -27,13 +27,13 @@ public class ActorService {
 		if (actorRepo.existsById(actorId)) {
 			return this.actorRepo.findById(actorId);
 		} else {
-			throw new RuntimeException("Actor with ID: " + actorId + " not found");
+			throw new NotFoundException("Actor with ID: " + actorId + " not found");
 		}
 	}
 
 	public void addActor(Actor actor) {
 		if (actorRepo.existsById(actor.getActorId())) {
-			throw new RuntimeException(
+			throw new NotFoundException(
 					"Actor with ID: " + actor.getActorId() + " exists, please update correctly using a PUT method");
 		}
 		this.actorRepo.save(actor);
@@ -41,7 +41,7 @@ public class ActorService {
 	
 	// cannot update actors as they only reference a personnelId at the moment
 	public void updateActor(Actor actor) {
-			throw new RuntimeException("Cannot update actors");
+			throw new NotFoundException("Cannot update actors");
 	}
 	
 //	public void deleteActorById(int actorId) {
@@ -49,7 +49,7 @@ public class ActorService {
 //			this.actorRepo.deleteById(actorId);
 //			
 //		} else {
-//			throw new RuntimeException("Actor with ID: " + actorId + " not found");
+//			throw new NotFoundException("Actor with ID: " + actorId + " not found");
 //		}
 //	}
 	
@@ -57,7 +57,7 @@ public class ActorService {
 		if (actorRepo.existsById(actorId)) {
 			actorRepo.deleteByActorId(actorId);
 		} else {
-			throw new RuntimeException("Director with ID: " + actorId + " not found");
+			throw new NotFoundException("Director with ID: " + actorId + " not found");
 		}
 	}
 	

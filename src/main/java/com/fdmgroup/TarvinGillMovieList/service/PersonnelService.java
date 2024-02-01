@@ -27,13 +27,13 @@ public class PersonnelService {
 		if (personnelRepo.existsById(personnelId)) {
 			return this.personnelRepo.findById(personnelId);
 		} else {
-			throw new RuntimeException("Personnel with ID: " + personnelId + " not found");
+			throw new NotFoundException("Personnel with ID: " + personnelId + " not found");
 		}
 	}
 
 	public void addPersonnel(Personnel person) {
 		if (personnelRepo.existsById(person.getPersonnelId())) {
-			throw new RuntimeException("Person with ID: " + person.getPersonnelId()
+			throw new NotFoundException("Person with ID: " + person.getPersonnelId()
 					+ " exists, please update correctly using a PUT method");
 		}
 		this.personnelRepo.save(person);
@@ -44,7 +44,7 @@ public class PersonnelService {
 
 			this.personnelRepo.save(person);
 		} else {
-			throw new RuntimeException("Personnel with ID: " + person.getPersonnelId() + " not found");
+			throw new NotFoundException("Personnel with ID: " + person.getPersonnelId() + " not found");
 		}
 	}
 
@@ -52,7 +52,7 @@ public class PersonnelService {
 		if (personnelRepo.existsById(personnelId)) {
 			this.personnelRepo.deleteById(personnelId);
 		} else {
-			throw new RuntimeException("Personnel with ID: " + personnelId + " not found");
+			throw new NotFoundException("Personnel with ID: " + personnelId + " not found");
 		}
 	}
 }
