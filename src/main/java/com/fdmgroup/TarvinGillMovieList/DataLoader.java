@@ -49,8 +49,8 @@ public class DataLoader implements ApplicationRunner{
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		User user1 = new User("tarvingill23@gmail,com", "tarvingill23", "password123");
-		User user2 = new User("juliexiong@gmail,com", "juliexiong17", "password1234");
+		User user1 = new User("tarvingill23@gmail.com", "tarvingill23", "password123");
+		User user2 = new User("juliexiong@gmail.com", "juliexiong17", "password1234");
 
 		MovieList list1 = new MovieList("Best movies of all time");
 		MovieList list2 = new MovieList("My favourite films of the 2010s");

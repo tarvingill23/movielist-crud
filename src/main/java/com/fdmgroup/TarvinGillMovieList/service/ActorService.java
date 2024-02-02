@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.ActorRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
+import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Actor;
 
 @Service
@@ -41,7 +43,7 @@ public class ActorService {
 	
 	// cannot update actors as they only reference a personnelId at the moment
 	public void updateActor(Actor actor) {
-			throw new NotFoundException("Cannot update actors");
+			throw new ForbiddenException("Cannot update actors");
 	}
 	
 //	public void deleteActorById(int actorId) {

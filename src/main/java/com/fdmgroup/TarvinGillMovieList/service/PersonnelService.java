@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.PersonnelRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Personnel;
 
 @Service

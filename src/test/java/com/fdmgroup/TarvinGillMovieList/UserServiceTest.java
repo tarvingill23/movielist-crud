@@ -69,12 +69,13 @@ public class UserServiceTest {
 	@Test
 	public void findById_throws_exception_if_user_does_not_exist() {
 		int userId = 1;
+		// user does not exist in the database
 		when(userRepository.existsById(userId)).thenReturn(false);
 
 		Throwable exception = assertThrows(RuntimeException.class, () -> {
 			userService.findById(userId);
 		});
-
+		
 		assertEquals("User with ID: " + userId + " not found", exception.getMessage());
 
 	}
@@ -84,6 +85,45 @@ public class UserServiceTest {
 		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
 		userService.save(user1);
 		verify(userRepository, times(1)).save(user1);
+	}
+	
+	@Test
+	public void add_new_user_throws_exception_if_user_exists() {
+		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
+		user1.setUserId(1);
+		
+		when(userRepository.existsById(user1.getUserId())).thenReturn(true);
+		
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			userService.save(user1);
+		});
+		assertEquals("User with ID: " + user1.getUserId() + " exists, please update correctly using a PUT method", exception.getMessage());
+	}
+	@Test
+	public void add_new_user_throws_exception_if_username_is_taken() {
+		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
+		user1.setUserId(1);
+		
+		// Pretend username already exists in database
+		when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
+		
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			userService.save(user1);
+		});
+		assertEquals("This username has been taken, please type in another username", exception.getMessage());
+	}
+	@Test
+	public void add_new_user_throws_exception_if_email_is_taken() {
+		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
+		user1.setUserId(1);
+		
+		// Pretend username already exists in database
+		when(userRepository.existsByEmail(user1.getEmail())).thenReturn(true);
+		
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			userService.save(user1);
+		});
+		assertEquals("User with email " + user1.getEmail() + " already exists, please login", exception.getMessage());
 	}
 
 	@Test
@@ -97,12 +137,9 @@ public class UserServiceTest {
 		// Pretend that the original user exists in the database
 		when(userRepository.existsById(originalUser.getUserId())).thenReturn(true);
 		
-
+		
 		userService.update(updatedUser);
-		
 		verify(userRepository, times(1)).save(updatedUser);
-		
-		
 		// Get the original user
 		when(userRepository.findById(originalUser.getUserId())).thenReturn(Optional.of(updatedUser));
 		
@@ -124,6 +161,21 @@ public class UserServiceTest {
 		});
 
 		assertEquals("User with ID: " + user1.getUserId() + " not found", exception.getMessage());
+	}
+	@Test
+	public void update_user_throws_exception_if_username_already_exists() {
+		// user which is not persisted in the database
+		User user1 = new User("johndoe@gmail.com", "johndoe9812", "password123");
+		user1.setUserId(1);
+		
+		// Pretend username already exists in database
+		when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
+		
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			userService.update(user1);
+		});
+		
+		assertEquals("This username has been taken, please type in another username", exception.getMessage());
 	}
 
 	@Test
