@@ -64,7 +64,7 @@ public class UserServiceTest {
 	 */
 	
 	@Test
-	public void findAll_users_return_2_users() {
+	public void findAll_users_returns_2_users() {
 		List<User> users = new ArrayList<User>();
 		users.add(new User("tarvingill23@gmail,com", "tarvingill23", "password123"));
 		users.add(new User("juliexiong17@gmail.com", "juliexiong17", "password12"));
@@ -167,6 +167,24 @@ public class UserServiceTest {
 	 * UPDATE USERS
 	 */
 	
+//	@Test
+//	public void update_username() {
+//		
+//		User updatedUser1 = new User("johndoe@gmail.com", "updatedUsername", "password1234");
+//		
+//		userService.update(updatedUser1);
+//		when(userRepository.existsById(user1.getUserId())).thenReturn(true);
+//		when(userRepository.existsByEmail(user1.getUsername())).thenReturn(true);
+//		when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
+//		
+//		userService.updateUsername(updatedUser1, user1);
+//		userService.update(updatedUser1);
+//		
+//		System.out.println(updatedUser1);
+//		System.out.println(user1);
+//		
+//		verify(userRepository, times(1)).save(updatedUser1);
+//	}
 	
 	
 	@Test
@@ -194,6 +212,7 @@ public class UserServiceTest {
 		
 		assertEquals("This username has been taken, please type in another username", exception.getMessage());
 		assertEquals("Updating user email is not permitted", exception2.getMessage());
+	
 		
 		verify(userRepository, times(0)).save(user1); // check that user repository method was not called
 	}

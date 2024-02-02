@@ -13,7 +13,7 @@ import com.fdmgroup.TarvinGillMovieList.model.Personnel;
 @Service
 public class PersonnelService {
 	private PersonnelRepository personnelRepo;
-	
+
 	@Autowired
 	public PersonnelService(PersonnelRepository personnelRepo) {
 		super();
@@ -25,34 +25,29 @@ public class PersonnelService {
 	}
 
 	public Optional<Personnel> getPersonnelById(int personnelId) {
-		if (personnelRepo.existsById(personnelId)) {
-			return this.personnelRepo.findById(personnelId);
-		} else {
-			throw new NotFoundException("Personnel with ID: " + personnelId + " not found");
-		}
+		checkPersonnelExists(personnelId);
+		return this.personnelRepo.findById(personnelId);
 	}
 
 	public void addPersonnel(Personnel person) {
 		if (personnelRepo.existsById(person.getPersonnelId())) {
-			throw new NotFoundException("Person with ID: " + person.getPersonnelId()
-					+ " exists, please update correctly using a PUT method");
+			throw new NotFoundException("Person with ID: " + person.getPersonnelId() + " exists");
 		}
 		this.personnelRepo.save(person);
 	}
 
 	public void updatePersonnel(Personnel person) {
-		if (personnelRepo.existsById(person.getPersonnelId())) {
-
-			this.personnelRepo.save(person);
-		} else {
-			throw new NotFoundException("Personnel with ID: " + person.getPersonnelId() + " not found");
-		}
+		checkPersonnelExists(person.getPersonnelId());
+		this.personnelRepo.save(person);
 	}
 
 	public void deletePersonnelById(int personnelId) {
-		if (personnelRepo.existsById(personnelId)) {
-			this.personnelRepo.deleteById(personnelId);
-		} else {
+		checkPersonnelExists(personnelId);
+		this.personnelRepo.deleteById(personnelId);
+	}
+
+	public void checkPersonnelExists(int personnelId) {
+		if (!personnelRepo.existsById(personnelId)) {
 			throw new NotFoundException("Personnel with ID: " + personnelId + " not found");
 		}
 	}

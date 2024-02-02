@@ -27,10 +27,15 @@ class UserControllerTest {
 	
 	@Autowired
 	UserController userController;
+	
+	User user1;
+	Optional<User> opUser1;
 
 	@BeforeEach
 	public void setup() { 
 		userController = new UserController(userService);
+		user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
+		opUser1 = Optional.of(new User("johndoe@gmail.com", "johndoe23", "password123"));
 	}
 	
 	@Test
@@ -62,16 +67,14 @@ class UserControllerTest {
 	
 	@Test
 	public void add_new_user_to_database() {
-		User user1 = new User("johndoe@gmail.com", "johndoe23", "password123");
 		userController.addUser(user1);
 		verify(userService, times(1)).save(user1);
 	}
 	
 	@Test
 	public void update_user_in_database() {
-		User updatedUser1 = new User("johndoe@gmail.com", "johndoe9812", "password123");
-		userController.updateUser(updatedUser1);
-		verify(userService, times(1)).update(updatedUser1);
+		userController.updateUser(user1);
+		verify(userService, times(1)).update(user1);
 	}
 	
 	@Test

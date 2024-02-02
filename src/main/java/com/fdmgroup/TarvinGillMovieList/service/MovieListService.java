@@ -26,19 +26,15 @@ public class MovieListService {
 	}
 
 	public Optional<MovieList> findById(int listId) {
-		if (mvRepo.existsById(listId)) {
-			return this.mvRepo.findById(listId);
-		} else {
-			throw new NotFoundException("Movie list with ID: " + listId + " not found");
-		}
+		checkMovieListExists(listId);
+		return this.mvRepo.findById(listId);
 	}
 
 	public void createList(MovieList mvList) {
 		if (mvRepo.existsById(mvList.getListId())) {
 			throw new NotFoundException("Movie list with ID: " + mvList.getListId()
-					+ " exists, please update correctly using a PUT method");
+					+ " exists");
 		}
-
 		// ensures that the dates are correct when list is created regardless of input
 		mvList.setDateCreated(new Date(System.currentTimeMillis()));
 		mvList.setDateModified(new Date(System.currentTimeMillis()));
@@ -46,17 +42,19 @@ public class MovieListService {
 	}
 
 	public void update(MovieList mvList) {
-		if (mvRepo.existsById(mvList.getListId())) {
-			this.mvRepo.save(mvList);
-		} else {
-			throw new NotFoundException("Movie list with ID: " + mvList.getListId() + " not found");
-		}
+		checkMovieListExists(mvList.getListId());
+		mvList.setDateModified(new Date(System.currentTimeMillis()));
+		this.mvRepo.save(mvList);
 	}
 
 	public void deleteById(int listId) {
-		if (mvRepo.existsById(listId)) {
-			this.mvRepo.deleteById(listId);
-		} else {
+		checkMovieListExists(listId);
+		this.mvRepo.deleteById(listId);
+
+	}
+
+	public void checkMovieListExists(int listId) {
+		if (!mvRepo.existsById(listId)) {
 			throw new NotFoundException("Movie list with ID: " + listId + " not found");
 		}
 	}

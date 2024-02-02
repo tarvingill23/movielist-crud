@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
 import com.fdmgroup.TarvinGillMovieList.model.Director;
 import com.fdmgroup.TarvinGillMovieList.service.DirectorService;
 
@@ -39,14 +40,10 @@ public class DirectorController {
 	}
 	
 	@PutMapping("directors")
-	public void updateDirector(@RequestBody Director director) {
-		directorService.updateDirector(director);
+	public void updateDirector() {
+		directorService.updateDirector();
 	}
 	
-//	@DeleteMapping ("directors/{dirId}") 
-//	public void deleteDirectorById(@PathVariable int dirId) {
-//		directorService.deleteDirectorById(dirId);
-//	}
 	@DeleteMapping ("directors/{dirId}") 
 	public void deleteByDirID(@PathVariable int dirId) {
 		directorService.deleteByDirId(dirId);

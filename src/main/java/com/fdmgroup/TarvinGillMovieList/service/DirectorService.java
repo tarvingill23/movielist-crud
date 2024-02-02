@@ -26,41 +26,30 @@ public class DirectorService {
 	}
 
 	public Optional<Director> getDirectorById(int dirId) {
-		if (directorRepo.existsById(dirId)) {
-			return this.directorRepo.findById(dirId);
-		} else {
-			throw new NotFoundException("Director with ID: " + dirId + " not found");
-		}
+		checkDirectorExists(dirId);
+		return this.directorRepo.findById(dirId);
 	}
 
 	public void addDirector(Director director) {
 		if (directorRepo.existsById(director.getDirId())) {
-			throw new NotFoundException(
-					"Director with ID: " + director.getDirId() + " exists, please update correctly using a PUT method");
+			throw new NotFoundException("Director with ID: " + director.getDirId() + " exists");
 		} else {
 			this.directorRepo.save(director);
 		}
 	}
 
 	// cannot update actors as they only reference a personnelId at the moment
-	public void updateDirector(Director director) {
+	public void updateDirector() {
 		throw new ForbiddenException("Cannot update directors");
 	}
 
-//	public void deleteDirectorById(int dirId) {
-//		if (directorRepo.existsById(dirId)) {
-//			System.out.println("Ran");
-//			this.directorRepo.deleteById(dirId);
-//			System.out.println("Ran2");
-//		} else {
-//			throw new RuntimeException("Director with ID: " + dirId + " not found");
-//		}
-//	}
-	
 	public void deleteByDirId(int dirId) {
-		if (directorRepo.existsById(dirId)) {
-			directorRepo.deleteByDirId(dirId);
-		} else {
+		checkDirectorExists(dirId);
+		directorRepo.deleteByDirId(dirId);
+	}
+
+	public void checkDirectorExists(int dirId) {
+		if (!directorRepo.existsById(dirId)) {
 			throw new NotFoundException("Director with ID: " + dirId + " not found");
 		}
 	}

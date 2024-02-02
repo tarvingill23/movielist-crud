@@ -41,14 +41,9 @@ public class ActorController {
 	}
 	
 	@PutMapping("actors")
-	public void updateActor(@RequestBody Actor actor) {
-		actorService.updateActor(actor);
+	public void updateActor() {
+		actorService.updateActor();
 	}
-
-//	@DeleteMapping ("actors/{actorId}") 
-//	public void deleteActorById(@PathVariable int actorId) {
-//		actorService.deleteActorById(actorId);
-//	}
 	
 	@DeleteMapping ("actors/{actorId}") 
 	public void deleteActorById(@PathVariable int actorId) {

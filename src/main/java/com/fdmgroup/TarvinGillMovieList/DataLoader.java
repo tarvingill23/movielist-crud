@@ -59,12 +59,12 @@ public class DataLoader implements ApplicationRunner{
 		Movie movie1 = new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
 				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
 				4, "Action",
-				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-Are6tUt-IHheN0fmqzWZkb2xu-t2YLSETSir59FmOi47DKBslRN-0vAiVLFFt9EtjJI&usqp=CAU");
+				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg");
 
 		Movie movie2 = new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
 				"While out hunting, Llewelyn finds the grisly aftermath of a drug deal. Though he knows better, he cannot resist the cash left behind and takes it. The hunter becomes the hunted when a merciless killer named Chigurh picks up his trail.",
 				5, "Thriller",
-				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg");
+				"https://upload.wikimedia.org/wikipedia/en/8/8b/No_Country_for_Old_Men_poster.jpg");
 
 		Movie movie3 = new Movie("Oppenheimer", Date.valueOf("2023-07-21"), 181,
 				"The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
