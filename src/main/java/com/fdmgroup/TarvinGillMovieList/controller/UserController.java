@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import com.fdmgroup.TarvinGillMovieList.model.User;
 import com.fdmgroup.TarvinGillMovieList.service.UserService;
 
 @RestController
+//@CrossOrigin("http://localhost:5173")
 public class UserController {
 private UserService userService;
 	
@@ -33,6 +35,11 @@ private UserService userService;
 	@GetMapping("users/{userId}")
 	public Optional<User> getUserById(@PathVariable int userId) {
 		return userService.findById(userId);
+	}
+	
+	@PostMapping("login")
+	public Optional<User> verifyUser(@RequestBody User user) {
+		return userService.verifyUser(user);
 	}
 	
 	@PostMapping("users")

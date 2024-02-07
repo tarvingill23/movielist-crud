@@ -32,6 +32,17 @@ public class UserService {
 		checkUserExists(userId);
 		return this.userRepository.findById(userId);
 	}
+	
+	public Optional<User> verifyUser(User user) {
+		if(userRepository.existsByEmail(user.getEmail())) {
+			Optional<User> foundOpUser = userRepository.findByEmail(user.getEmail());
+			User foundUser = foundOpUser.get();
+			if(foundUser.getPassword().equals(user.getPassword())) {
+				return this.userRepository.findById(foundUser.getUserId());
+			}
+		}
+		throw new NotFoundException("User with email " + user.getEmail() + " not found");
+	}
 
 	// done
 	public void save(User newUser) {

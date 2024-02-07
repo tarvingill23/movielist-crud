@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
+import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
 
@@ -29,7 +30,7 @@ public class MovieListService {
 		checkMovieListExists(listId);
 		return this.mvRepo.findById(listId);
 	}
-
+	
 	public void createList(MovieList mvList) {
 		if (mvRepo.existsById(mvList.getListId())) {
 			throw new NotFoundException("Movie list with ID: " + mvList.getListId()

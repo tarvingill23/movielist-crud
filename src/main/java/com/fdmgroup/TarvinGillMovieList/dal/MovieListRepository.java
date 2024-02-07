@@ -8,5 +8,4 @@ import com.fdmgroup.TarvinGillMovieList.model.MovieList;
 
 @Repository
 public interface MovieListRepository extends JpaRepository<MovieList, Integer>{
-	
 }

@@ -64,7 +64,7 @@ public class DataLoader implements ApplicationRunner{
 		Movie movie2 = new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
 				"While out hunting, Llewelyn finds the grisly aftermath of a drug deal. Though he knows better, he cannot resist the cash left behind and takes it. The hunter becomes the hunted when a merciless killer named Chigurh picks up his trail.",
 				5, "Thriller",
-				"https://upload.wikimedia.org/wikipedia/en/8/8b/No_Country_for_Old_Men_poster.jpg");
+				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg");
 
 		Movie movie3 = new Movie("Oppenheimer", Date.valueOf("2023-07-21"), 181,
 				"The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.",
