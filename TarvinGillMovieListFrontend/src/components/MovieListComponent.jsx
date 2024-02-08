@@ -12,9 +12,11 @@ import MovieOptionsModal from "./MovieOptionsModal";
 const MovieListComponent = ({ usernameProp }) => {
   const [movielist, setMovielist] = useState([]);
   const [movies, setMovies] = useState(movielist.movies);
+  const [title, setTitle] = useState("");
+  const [user, setUser] = useState({});
+
   const [movieOptions, setMovieOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [title, setTitle] = useState();
   const [showIcon, setShowIcon] = useState(false);
   const [editingMode, setEditMode] = useState();
 
@@ -30,6 +32,7 @@ const MovieListComponent = ({ usernameProp }) => {
         setMovielist(response.data);
         setMovies(response.data.movies.sort((a, b) => b.rating - a.rating)); // sorts descending by rating by default
         setTitle(response.data.title);
+        setUser(response.data.user);
       })
       .then(() => {
         setLoading(false);
@@ -61,15 +64,19 @@ const MovieListComponent = ({ usernameProp }) => {
   // Update a movielist
   const updateList = () => {
     const apiUpdate = "/api/movielists";
+    console.log(listId);
+    const updatedMovielist = {
+      listId,
+      title,
+      movies,
+      user, // never changes
+    };
+    console.log(updatedMovielist);
     axios
-      .put(apiUpdate, {
-        listId: listId,
-        title: title,
-        movies: movies,
-      })
+      .put(apiUpdate, updatedMovielist)
       .then((response) => {
         console.log(response);
-        navigate(`/movielists/${listId}`);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);

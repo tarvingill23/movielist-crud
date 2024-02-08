@@ -5,9 +5,10 @@ import PropTypes from "prop-types";
 import "../assets/styles/pages/HomePage.css";
 import MovieListCardComponent from "../components/MovieListCardComponent";
 
-const HomePage = ({ bearerProp, usernameProp }) => {
+const HomePage = ({ bearerProp, usernameProp, userMovielistsProp }) => {
   const [movielists, setMovielists] = useState([]);
-  const [userMovielists, setUserMovielists] = useState([]);
+  const [userMovielists, setUserMovielists] = userMovielistsProp;
+  console.log(userMovielistsProp);
   useEffect(() => {
     const api = "api/movielists";
     axios

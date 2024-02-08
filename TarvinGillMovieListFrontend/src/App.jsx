@@ -6,17 +6,25 @@ import HeaderComponent from "./components/HeaderComponent";
 import LoginPage from "./pages/LoginPage";
 import { useState } from "react";
 import MovieListComponent from "./components/MovieListComponent";
+import ViewUserListsPage from "./pages/ViewUserListsPage";
 function App() {
   const [bearer, setBearer] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("tarvingill23");
+  const [userMovielists, setUserMovielists] = useState([]);
 
   return (
     <div className="App">
-      <HeaderComponent bearerProp={bearer} />
+      <HeaderComponent usernameProp={username} bearerProp={bearer} />
       <Routes>
         <Route
           path="/"
-          element={<HomePage usernameProp={username} bearerProp={bearer} />}
+          element={
+            <HomePage
+              userMovielistsProp={[userMovielists, setUserMovielists]}
+              usernameProp={username}
+              bearerProp={bearer}
+            />
+          }
         />
         <Route
           path="/movielists/:listId"
@@ -28,6 +36,15 @@ function App() {
             <LoginPage
               bearerProp={[bearer, setBearer]}
               usernameProp={[username, setUsername]}
+            />
+          }
+        />
+        <Route
+          path="/mylists"
+          element={
+            <ViewUserListsPage
+              userMovielistsProp={userMovielists}
+              usernameProp={username}
             />
           }
         />

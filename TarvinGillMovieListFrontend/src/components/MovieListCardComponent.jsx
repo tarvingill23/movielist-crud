@@ -8,7 +8,10 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
       <h1>{sectionTitle}</h1>
       {movieLists.map((movieList) => {
         return (
-          <Link key={movieList.listId} to={`movielists/${movieList.listId}`}>
+          <Link
+            key={movieList.listId}
+            to={`http://localhost:5173/movielists/${movieList.listId}`}
+          >
             {movieList.title}
           </Link>
         );
