@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.annotations.Immutable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +25,7 @@ public class User {
 	@Column(nullable = false)
 	private String username;
 	@Column(nullable = false)
+	 @JsonIgnore
 	private String password;
 	
 	@OneToMany(mappedBy="user", cascade= CascadeType.ALL)
