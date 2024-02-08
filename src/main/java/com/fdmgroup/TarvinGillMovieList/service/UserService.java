@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
@@ -15,11 +16,13 @@ import com.fdmgroup.TarvinGillMovieList.model.User;
 @Service
 public class UserService {
 	private UserRepository userRepository;
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		super();
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	// done
@@ -32,12 +35,12 @@ public class UserService {
 		checkUserExists(userId);
 		return this.userRepository.findById(userId);
 	}
-	
+
 	public Optional<User> verifyUser(User user) {
-		if(userRepository.existsByEmail(user.getEmail())) {
+		if (userRepository.existsByEmail(user.getEmail())) {
 			Optional<User> foundOpUser = userRepository.findByEmail(user.getEmail());
 			User foundUser = foundOpUser.get();
-			if(foundUser.getPassword().equals(user.getPassword())) {
+			if (foundUser.getPassword().equals(user.getPassword())) {
 				return this.userRepository.findById(foundUser.getUserId());
 			}
 		}
@@ -46,7 +49,7 @@ public class UserService {
 
 	// done
 	public void save(User newUser) {
-		if(userRepository.existsById(newUser.getUserId())) {
+		if (userRepository.existsById(newUser.getUserId())) {
 			throw new ConflictException("User with ID: " + newUser.getUserId() + " exists");
 		}
 		if (userRepository.existsByEmail(newUser.getEmail())) {
@@ -57,14 +60,14 @@ public class UserService {
 		}
 		this.userRepository.save(newUser);
 	}
-	 
+
 	public void update(User newUser) {
 		checkUserExists(newUser.getUserId());
 		Optional<User> user = findById(newUser.getUserId());
 		User foundUser = user.get();
 		updateEmail(newUser, foundUser);
 		updateUsername(newUser, foundUser);
-		
+
 		this.userRepository.save(newUser);
 	}
 
@@ -92,4 +95,13 @@ public class UserService {
 			throw new NotFoundException("User with ID: " + userId + " not found");
 		}
 	}
+
+	public void register(List<User> users) {
+        //Hash(encode) the password
+		for(User user: users) {
+	        String hashedPassword = passwordEncoder.encode(user.getPassword());
+	        user.setPassword(hashedPassword);
+	        this.userRepository.save(user);
+		}
+    }
 }

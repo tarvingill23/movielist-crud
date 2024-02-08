@@ -23,27 +23,27 @@ import com.fdmgroup.TarvinGillMovieList.model.Movie;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
 import com.fdmgroup.TarvinGillMovieList.model.Personnel;
 import com.fdmgroup.TarvinGillMovieList.model.User;
+import com.fdmgroup.TarvinGillMovieList.service.UserService;
 
 @Service
 public class DataLoader implements ApplicationRunner{
-	
-	private UserRepository userRepo;
 	private MovieListRepository mlRepo;
 	private MovieRepository movieRepo;
 	private PersonnelRepository personnelRepo;
 	private ActorRepository actorRepo;
 	private DirectorRepository directorRepo;
+	private UserService userService;
 	
 	
 	@Autowired
-	public DataLoader (UserRepository userRepo, MovieListRepository mlRepo, MovieRepository movieRepo, PersonnelRepository personnelRepo, ActorRepository actorRepo, DirectorRepository directorRepo) {
+	public DataLoader (UserRepository userRepo, MovieListRepository mlRepo, MovieRepository movieRepo, PersonnelRepository personnelRepo, ActorRepository actorRepo, DirectorRepository directorRepo, UserService userService) {
 		super();
-		this.userRepo = userRepo;
 		this.mlRepo = mlRepo;
 		this.movieRepo = movieRepo;
 		this.personnelRepo = personnelRepo;
 		this.actorRepo = actorRepo;
 		this.directorRepo = directorRepo;
+		this.userService = userService;
 	}
 
 
@@ -311,7 +311,7 @@ public class DataLoader implements ApplicationRunner{
 		personnelRepo.saveAll(personnel);
 		actorRepo.saveAll(actors);
 		directorRepo.saveAll(directors);
-		userRepo.saveAll(users);
+		userService.register(users);
 		movieRepo.saveAll(movies);
 		mlRepo.saveAll(movieLists);
 	}

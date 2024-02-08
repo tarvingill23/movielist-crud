@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
 import com.fdmgroup.TarvinGillMovieList.model.User;
@@ -24,7 +25,10 @@ import com.fdmgroup.TarvinGillMovieList.service.UserService;
 public class UserServiceTest {
 
 	@Mock
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	UserService userService;
@@ -37,7 +41,7 @@ public class UserServiceTest {
 
 	@BeforeEach
 	public void setup() {
-		userService = new UserService(userRepository);
+		userService = new UserService(userRepository, passwordEncoder);
 		
 		user1 = new User("johndoe@gmail.com", "johndoe9812", "password1234");
 		user1.setUserId(1);

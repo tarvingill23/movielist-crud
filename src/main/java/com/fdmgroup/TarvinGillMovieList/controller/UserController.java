@@ -17,7 +17,6 @@ import com.fdmgroup.TarvinGillMovieList.model.User;
 import com.fdmgroup.TarvinGillMovieList.service.UserService;
 
 @RestController
-//@CrossOrigin("http://localhost:5173")
 public class UserController {
 private UserService userService;
 	
