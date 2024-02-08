@@ -187,7 +187,7 @@ public class ServiceTests {
 	 */
 
 //	@Test
-//	public void update_username() {
+//	public void update_user() {
 //		
 //		User updatedUser1 = new User("johndoe@gmail.com", "updatedUsername", "password1234");
 //		updatedUser1.setUserId(1);
@@ -289,6 +289,31 @@ public class ServiceTests {
 		mlService.createList(mvList1);
 		verify(mlRepo, times(1)).save(mvList1);
 	}
+	@Test
+	public void add_new_movie_list_throws_exception() {
+		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+		mvList1.setListId(1);
+		
+		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
+
+		Throwable exception = assertThrows(RuntimeException.class, () -> {
+			mlService.createList(mvList1);
+		});
+
+		assertEquals("Movie list with ID: " + mvList1.getListId() + " exists",exception.getMessage());
+	}
+	
+	@Test
+	public void update_list() {
+		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+		mvList1.setListId(1);
+		
+		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
+		
+		mlService.update(mvList1);
+		
+		verify(mlRepo, times(1)).save(mvList1);
+	}
 	
 	
 	@Test
@@ -302,6 +327,19 @@ public class ServiceTests {
 
 		assertEquals("Movie list with ID: " + mvList1.getListId() + " not found",exception.getMessage());
 	}
+	
+	@Test
+	public void delete_list() {
+		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+		mvList1.setListId(1);
+		
+		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
+		
+		mlService.deleteById(mvList1.getListId());
+		
+		verify(mlRepo, times(1)).deleteById(mvList1.getListId());
+	}
+	
 	
 	@Test
 	public void delete_list_throws_exception_if_id_does_not_exist() {

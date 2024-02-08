@@ -132,7 +132,26 @@ class ControllerTests {
 		
 		assertEquals(foundMvList, mvList1);
 		verify(mlService, times(1)).findById(listId);
+	}	
+	@Test
+	public void add_new_movielist_to_database() {
+		MovieList mvList1 = (new MovieList("Best movies of all time"));
+		mlController.addMovieList(mvList1);
+		verify(mlService, times(1)).createList(mvList1);
 	}
-
+	
+	@Test
+	public void update_movielist_in_database() {
+		MovieList mvList1 = (new MovieList("Updated best movies of all time"));
+		mlController.updateMovieList(mvList1);
+		verify(mlService, times(1)).update(mvList1);
+	}
+	
+	@Test
+	public void delete_movielist_in_database() {
+		int userId = 1;
+		mlController.deleteMovieList(userId);
+		verify(mlService, times(1)).deleteById(userId);
+	}
 	
 }
