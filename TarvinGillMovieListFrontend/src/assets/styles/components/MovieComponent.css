@@ -1,0 +1,48 @@
+.movie-div {
+  display: flex;
+  padding: 80px;
+}
+.content {
+  justify-content: flex-start;
+  margin: 120px;
+}
+
+.poster-img {
+  height: 400px;
+}
+
+.star-rating {
+  display: flex;
+  margin: 50px;
+}
+
+.star {
+  margin: 8px;
+}
+.star-gold {
+  margin: 8px;
+  color: gold;
+}
+.director-label {
+  display: inline;
+}
+.directors {
+  display: inline-flex;
+}
+
+.actor-label {
+  display: inline;
+}
+.actors {
+  display: inline;
+}
+
+.delete-icon {
+  justify-self: flex-end;
+  padding: 15px;
+  background-color: transparent;
+  outline: none;
+  color: white;
+  box-shadow: none;
+  border-radius: 0px;
+}

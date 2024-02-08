@@ -1,0 +1,12 @@
+.App {
+  display: flex;
+  text-align: start;
+  background-color: #312e2e;
+  color: white;
+}
+a {
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}

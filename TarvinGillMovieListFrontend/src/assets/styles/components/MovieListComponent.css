@@ -1,0 +1,18 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-top: 100px;
+  color: white;
+  align-items: center;
+}
+
+.editing-input {
+  width: 300px;
+}
+.editing-buttons {
+  padding: 30px;
+}
+.editing-buttons button {
+  margin: 10px;
+}
