@@ -1,6 +1,7 @@
 package com.fdmgroup.TarvinGillMovieList.service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,14 +38,14 @@ public class MovieListService {
 					+ " exists");
 		}
 		// ensures that the dates are correct when list is created regardless of input
-		mvList.setDateCreated(new Date(System.currentTimeMillis()));
-		mvList.setDateModified(new Date(System.currentTimeMillis()));
+		mvList.setDateCreated(new Timestamp(System.currentTimeMillis()));
+		mvList.setDateModified(new Timestamp(System.currentTimeMillis()));
 		this.mvRepo.save(mvList);
 	}
 
 	public void update(MovieList mvList) {
 		checkMovieListExists(mvList.getListId());
-		mvList.setDateModified(new Date(System.currentTimeMillis()));
+		mvList.setDateModified(new Timestamp(System.currentTimeMillis()));
 		this.mvRepo.save(mvList);
 	}
 

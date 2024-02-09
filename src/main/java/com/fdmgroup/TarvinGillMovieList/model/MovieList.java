@@ -2,6 +2,7 @@ package com.fdmgroup.TarvinGillMovieList.model;
 
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.hibernate.annotations.Immutable;
@@ -25,9 +26,9 @@ public class MovieList {
 	private String title;
 	@Immutable
 	@Column(name = "date_created", nullable = false)
-	private Date dateCreated;
+	private Timestamp dateCreated;
 	@Column(name = "date_modified", nullable=false)
-	private Date dateModified;
+	private Timestamp dateModified;
 	
 	@ManyToMany
 	@JoinTable(name = "MovieList_Movie", joinColumns = @JoinColumn(name = "list_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
@@ -48,8 +49,8 @@ public class MovieList {
 	public MovieList(String title) {
 		super();
 		this.title = title;
-		this.dateCreated = new Date(System.currentTimeMillis());
-		this.dateModified = new Date(System.currentTimeMillis());	
+		this.dateCreated = new Timestamp(System.currentTimeMillis());
+		this.dateModified = new Timestamp(System.currentTimeMillis());	
 	}
 	
 	/**
@@ -72,19 +73,19 @@ public class MovieList {
 		this.title = title;
 	}
 
-	public Date getDateCreated() {
+	public Timestamp getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(Timestamp dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public Date getDateModified() {
+	public Timestamp getDateModified() {
 		return dateModified;
 	}
 
-	public void setDateModified(Date dateModified) {
+	public void setDateModified(Timestamp dateModified) {
 		this.dateModified = dateModified;
 	}
 	

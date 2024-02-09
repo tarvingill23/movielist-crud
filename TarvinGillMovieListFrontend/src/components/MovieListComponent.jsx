@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditOutlined } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { EditOutlined, SaveOutlined } from "@mui/icons-material";
+import { Button, ButtonGroup, Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
 
 import "../assets/styles/components/MovieListComponent.css";
 import Movie from "../components/MovieComponent";
 import MovieOptionsModal from "./MovieOptionsModal";
+import { LoadingButton } from "@mui/lab";
 
 const MovieListComponent = ({ usernameProp }) => {
   const [movielist, setMovielist] = useState([]);
@@ -17,6 +18,7 @@ const MovieListComponent = ({ usernameProp }) => {
 
   const [movieOptions, setMovieOptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [showEditIcon, setShowEditIcon] = useState(false);
   const [editingMode, setEditMode] = useState();
 
@@ -47,9 +49,11 @@ const MovieListComponent = ({ usernameProp }) => {
     const apiDelete = `/api/movielists/${listId}`;
     let text = "Are you sure you want to delete this list";
     if (confirm(text) === true) {
+      setButtonLoading(true);
       axios
         .delete(apiDelete)
         .then(() => {
+          setButtonLoading(false);
           navigate("/");
         })
         .catch((error) => {
@@ -67,10 +71,15 @@ const MovieListComponent = ({ usernameProp }) => {
       movies,
       user, // never changes
     };
+    setButtonLoading(true);
     axios
       .put(apiUpdate, updatedMovielist)
       .then(() => {
+        setTimeout(() => {
+          setButtonLoading(false);
+        }, 1000);
         navigate("/");
+        navigate("/mylists");
       })
       .catch((error) => {
         console.log("Unable to update list", error);
@@ -123,6 +132,12 @@ const MovieListComponent = ({ usernameProp }) => {
     return formattedDate;
   };
 
+  const editingButtons = [
+    { id: 1, name: "Delete List", action: deleteList },
+    { id: 2, name: "Update List", action: updateList },
+    { id: 3, name: "Cancel", action: () => navigate("/") },
+  ];
+
   if (loading) {
     return <div className="list-container">...Loading</div>;
   } else {
@@ -143,17 +158,24 @@ const MovieListComponent = ({ usernameProp }) => {
                 onChange={(event) => setTitle(event.target.value)}
               />
             </div>
-            <div className="editing-buttons">
-              <button onClick={deleteList} type="submit">
-                Delete List
-              </button>
-              <button onClick={updateList} type="submit">
-                Update list
-              </button>
-              <button onClick={() => navigate(0)} type="submit">
-                Cancel
-              </button>
-            </div>
+
+            <Grid justifyContent={"space-around"} container>
+              <ButtonGroup>
+                {editingButtons.map((button) => {
+                  return (
+                    <LoadingButton
+                      loading={buttonLoading}
+                      loadingPosition="start"
+                      startIcon={<SaveOutlined />}
+                      key={button.id}
+                      onClick={button.action}
+                    >
+                      {button.name}
+                    </LoadingButton>
+                  );
+                })}
+              </ButtonGroup>
+            </Grid>
           </>
         )}
 
