@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EditOutlined } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
 
@@ -17,7 +17,7 @@ const MovieListComponent = ({ usernameProp }) => {
 
   const [movieOptions, setMovieOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showIcon, setShowIcon] = useState(false);
+  const [showEditIcon, setShowEditIcon] = useState(false);
   const [editingMode, setEditMode] = useState();
 
   const { listId } = useParams();
@@ -90,6 +90,13 @@ const MovieListComponent = ({ usernameProp }) => {
     );
     setMovies(updatedMovies);
   };
+  // Add movie based on movieData object passed by child to parent
+  const addMovie = (childMovie) => {
+    let updatedMovies = movies;
+    updatedMovies.push(childMovie);
+    console.log(updatedMovies);
+    setMovies(updatedMovies);
+  };
 
   // Load all movies
   useEffect(() => {
@@ -105,11 +112,15 @@ const MovieListComponent = ({ usernameProp }) => {
   }, []);
 
   useEffect(() => {
-    // optional chaining to handle undefined and null values
-    console.log(movielist);
+    movieOptions.filter((movie) =>
+      movies.some((movie2) => movie.id != movie2.id)
+    );
+  }, [movies, movieOptions]);
 
+  useEffect(() => {
+    // optional chaining to handle undefined and null values
     if (movielist.user?.username === usernameProp) {
-      setShowIcon(true);
+      setShowEditIcon(true);
     }
   }, [usernameProp, movielist]);
 
@@ -130,10 +141,10 @@ const MovieListComponent = ({ usernameProp }) => {
   } else {
     return (
       <div key={movielist.listId} className="list-container">
-        {showIcon && (
-          <button onClick={toggleEditMode}>
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
+        {showEditIcon && (
+          <Button onClick={toggleEditMode}>
+            <EditOutlined />
+          </Button>
         )}
         {editingMode && (
           <>
@@ -176,7 +187,7 @@ const MovieListComponent = ({ usernameProp }) => {
         </div>
 
         <div>
-          <MovieOptionsModal movies={movieOptions} />
+          <MovieOptionsModal movies={movieOptions} addMovie={addMovie} />
         </div>
       </div>
     );

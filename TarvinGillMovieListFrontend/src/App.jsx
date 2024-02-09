@@ -7,9 +7,10 @@ import LoginPage from "./pages/LoginPage";
 import { useState } from "react";
 import MovieListComponent from "./components/MovieListComponent";
 import ViewUserListsPage from "./pages/ViewUserListsPage";
+
 function App() {
   const [bearer, setBearer] = useState("");
-  const [username, setUsername] = useState("tarvingill23");
+  const [username, setUsername] = useState("");
   const [userMovielists, setUserMovielists] = useState([]);
 
   return (

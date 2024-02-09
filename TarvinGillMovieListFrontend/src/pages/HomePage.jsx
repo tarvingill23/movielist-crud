@@ -8,7 +8,6 @@ import MovieListCardComponent from "../components/MovieListCardComponent";
 const HomePage = ({ bearerProp, usernameProp, userMovielistsProp }) => {
   const [movielists, setMovielists] = useState([]);
   const [userMovielists, setUserMovielists] = userMovielistsProp;
-  console.log(userMovielistsProp);
   useEffect(() => {
     const api = "api/movielists";
     axios
@@ -24,7 +23,7 @@ const HomePage = ({ bearerProp, usernameProp, userMovielistsProp }) => {
       .catch((error) => {
         console.log("Unable to load data", error);
       });
-  }, [usernameProp]);
+  }, [setUserMovielists, usernameProp]);
   return (
     <div className="home">
       <div>
@@ -48,5 +47,6 @@ const HomePage = ({ bearerProp, usernameProp, userMovielistsProp }) => {
 HomePage.propTypes = {
   bearerProp: PropTypes.string,
   usernameProp: PropTypes.string,
+  userMovielistsProp: PropTypes.array,
 };
 export default HomePage;
