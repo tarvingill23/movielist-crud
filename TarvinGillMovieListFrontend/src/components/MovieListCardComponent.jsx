@@ -29,7 +29,7 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
       {movieLists.map((movieList) => {
         return (
           <Grid item xs={4} key={movieList.listId}>
-            <Card variant="outlined" raised style={cardStyle}>
+            <Card variant="outlined" style={cardStyle}>
               <Link to={`http://localhost:5173/movielists/${movieList.listId}`}>
                 <CardHeader title={movieList.title}></CardHeader>
                 <ImageList variant="masonry" cols={3} gap={12}>

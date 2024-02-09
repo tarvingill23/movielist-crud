@@ -9,7 +9,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
   // eslint-disable-next-line no-unused-vars
   const [bearer, setBearer] = bearerProp;
   const [username, setUsername] = usernameProp;
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("password123");
   const navigate = useNavigate();
 
   const style = {

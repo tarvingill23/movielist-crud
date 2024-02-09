@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-import "../assets/styles/pages/HomePage.css";
 import MovieListCardComponent from "../components/MovieListCardComponent";
 import { Grid } from "@mui/material";
 

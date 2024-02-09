@@ -22,7 +22,6 @@ const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
 
   return movies.map((movie) => (
     <div key={movie.movieId} className="movie-div">
-      {console.log(movies)}
       <div>
         {/* Passes the movie object back to parent */}
         {editMode && (

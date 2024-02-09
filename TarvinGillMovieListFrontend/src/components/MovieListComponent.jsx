@@ -50,13 +50,10 @@ const MovieListComponent = ({ usernameProp }) => {
       axios
         .delete(apiDelete)
         .then(() => {
-          // console.log(response);
-        })
-        .then(() => {
           navigate("/");
         })
         .catch((error) => {
-          console.error(error);
+          console.log("Unable to delete list", error);
         });
     }
   };
@@ -64,22 +61,19 @@ const MovieListComponent = ({ usernameProp }) => {
   // Update a movielist
   const updateList = () => {
     const apiUpdate = "/api/movielists";
-    console.log(listId);
     const updatedMovielist = {
       listId,
       title,
       movies,
       user, // never changes
     };
-    console.log(updatedMovielist);
     axios
       .put(apiUpdate, updatedMovielist)
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Unable to update list", error);
       });
   };
 
@@ -94,7 +88,6 @@ const MovieListComponent = ({ usernameProp }) => {
   const addMovie = (childMovie) => {
     let updatedMovies = movies;
     updatedMovies.push(childMovie);
-    console.log(updatedMovies);
     setMovies(updatedMovies);
   };
 
@@ -110,12 +103,6 @@ const MovieListComponent = ({ usernameProp }) => {
         console.log("Unable to load data", error);
       });
   }, []);
-
-  // useEffect(() => {
-  //   movieOptions.filter((movie) =>
-  //     movies.some((movie2) => movie.id != movie2.id)
-  //   );
-  // }, [movies, movieOptions]);
 
   useEffect(() => {
     // optional chaining to handle undefined and null values

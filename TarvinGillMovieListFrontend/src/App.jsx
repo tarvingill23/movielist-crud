@@ -20,7 +20,7 @@ const theme = createTheme({
 
 function App() {
   const [bearer, setBearer] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("tarvingill23");
   const [userMovielists, setUserMovielists] = useState([]);
 
   return (
@@ -55,6 +55,7 @@ function App() {
             path="/mylists"
             element={
               <ViewUserListsPage
+                bearerProp={bearer}
                 userMovielistsProp={userMovielists}
                 usernameProp={username}
               />
