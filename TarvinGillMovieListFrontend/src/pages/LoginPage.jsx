@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/styles/pages/LoginPage.css";
-import axios from "axios";
 import PropTypes from "prop-types";
-import { TextField, Grid, Button, FormControl } from "@mui/material";
+
+import axios from "axios";
+import { TextField, Grid, Button } from "@mui/material";
 
 const LoginPage = ({ bearerProp, usernameProp }) => {
   // eslint-disable-next-line no-unused-vars
@@ -36,38 +36,36 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
     });
   };
   return (
-    <>
-      <Grid style={style} container spacing={6}>
-        <Grid item xs={12}>
-          Login
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            style={textFieldStyle}
-            color="primary"
-            label="username"
-            variant="outlined"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            style={textFieldStyle}
-            type="password"
-            label="password"
-            variant="outlined"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button onClick={submitted} variant="outlined">
-            Submit
-          </Button>
-        </Grid>
+    <Grid style={style} container spacing={6}>
+      <Grid item xs={12}>
+        Login
       </Grid>
-    </>
+      <Grid item xs={12}>
+        <TextField
+          style={textFieldStyle}
+          color="primary"
+          label="username"
+          variant="outlined"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          style={textFieldStyle}
+          type="password"
+          label="password"
+          variant="outlined"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Button onClick={submitted} variant="outlined">
+          Submit
+        </Button>
+      </Grid>
+    </Grid>
   );
 };
 LoginPage.propTypes = {

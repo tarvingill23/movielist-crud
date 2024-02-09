@@ -35,7 +35,6 @@ function App() {
               <HomePage
                 userMovielistsProp={[userMovielists, setUserMovielists]}
                 usernameProp={username}
-                bearerProp={bearer}
               />
             }
           />

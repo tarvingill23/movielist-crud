@@ -4,10 +4,18 @@ import PropTypes from "prop-types";
 
 import "../assets/styles/pages/HomePage.css";
 import MovieListCardComponent from "../components/MovieListCardComponent";
+import { Grid } from "@mui/material";
 
-const HomePage = ({ bearerProp, usernameProp, userMovielistsProp }) => {
+const HomePage = ({ usernameProp, userMovielistsProp }) => {
   const [movielists, setMovielists] = useState([]);
+
+  // eslint-disable-next-line no-unused-vars
   const [userMovielists, setUserMovielists] = userMovielistsProp;
+
+  const gridStyle = {
+    marginTop: "120px",
+  };
+
   useEffect(() => {
     const api = "api/movielists";
     axios
@@ -25,23 +33,12 @@ const HomePage = ({ bearerProp, usernameProp, userMovielistsProp }) => {
       });
   }, [setUserMovielists, usernameProp]);
   return (
-    <div className="home">
-      <div>
-        <MovieListCardComponent
-          movieLists={movielists}
-          sectionTitle={"Check out these lists"}
-        />
-      </div>
-
-      {bearerProp && (
-        <div>
-          <MovieListCardComponent
-            movieLists={userMovielists}
-            sectionTitle={`${usernameProp} lists`}
-          />
-        </div>
-      )}
-    </div>
+    <Grid style={gridStyle} container>
+      <MovieListCardComponent
+        movieLists={movielists}
+        sectionTitle={"Check out these lists"}
+      />
+    </Grid>
   );
 };
 HomePage.propTypes = {

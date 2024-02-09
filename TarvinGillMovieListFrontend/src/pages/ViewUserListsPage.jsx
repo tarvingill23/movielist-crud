@@ -1,18 +1,16 @@
+import { Grid, Typography } from "@mui/material";
 import "../assets/styles/pages/ViewUserLists.css";
 import MovieListCardComponent from "../components/MovieListCardComponent";
 import PropTypes from "prop-types";
 const ViewUserLists = ({ userMovielistsProp, usernameProp }) => {
   return (
-    <div className="user-list-container">
-      {`${usernameProp} lists`}
-      <div>
-        <MovieListCardComponent movieLists={userMovielistsProp} />
-      </div>
-    </div>
+    <Grid>
+      <Typography variant="h3">{`${usernameProp} lists`}</Typography>
+      <MovieListCardComponent movieLists={userMovielistsProp} />
+    </Grid>
   );
 };
 ViewUserLists.propTypes = {
-  bearerProp: PropTypes.string,
   usernameProp: PropTypes.string,
   userMovielistsProp: PropTypes.array,
 };
