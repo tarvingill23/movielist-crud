@@ -111,11 +111,11 @@ const MovieListComponent = ({ usernameProp }) => {
       });
   }, []);
 
-  useEffect(() => {
-    movieOptions.filter((movie) =>
-      movies.some((movie2) => movie.id != movie2.id)
-    );
-  }, [movies, movieOptions]);
+  // useEffect(() => {
+  //   movieOptions.filter((movie) =>
+  //     movies.some((movie2) => movie.id != movie2.id)
+  //   );
+  // }, [movies, movieOptions]);
 
   useEffect(() => {
     // optional chaining to handle undefined and null values

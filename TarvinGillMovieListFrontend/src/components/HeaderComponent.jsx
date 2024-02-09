@@ -1,6 +1,5 @@
 import "../assets/styles/components/HeaderComponent.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { HomeOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -11,10 +10,11 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
     bearerProp = "";
     navigate(0);
   };
+
   return (
     <div className="header">
       <Link className="home-icon" to={"/"}>
-        <FontAwesomeIcon icon={faHome} />
+        <HomeOutlined />
       </Link>
       <h1>Movie List Maker</h1>
       <div className="login">

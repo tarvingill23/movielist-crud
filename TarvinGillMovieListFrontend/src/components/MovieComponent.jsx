@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Remove, Star } from "@mui/icons-material";
 
 import "../assets/styles/components/MovieComponent.css";
 import Director from "./DirectorComponent";
@@ -14,7 +13,7 @@ const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
       const dynamicClass = isGold ? "star-gold" : "star";
       items.push(
         <div key={i} className={dynamicClass}>
-          <FontAwesomeIcon icon={faStar} />
+          <Star />
         </div>
       );
     }
@@ -23,11 +22,12 @@ const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
 
   return movies.map((movie) => (
     <div key={movie.movieId} className="movie-div">
+      {console.log(movies)}
       <div>
         {/* Passes the movie object back to parent */}
         {editMode && (
           <button onClick={() => removeMovie(movie)} className="delete-icon">
-            <FontAwesomeIcon icon={faTrash} />
+            <Remove />
           </button>
         )}
 

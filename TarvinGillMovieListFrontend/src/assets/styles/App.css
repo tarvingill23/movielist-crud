@@ -1,8 +1,7 @@
 .App {
   display: flex;
-  text-align: start;
-  background-color: #312e2e;
-  color: white;
+  text-align: center;
+  justify-content: center;
 }
 a {
   color: inherit;

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/pages/LoginPage.css";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { TextField, Grid, Button, FormControl } from "@mui/material";
 
 const LoginPage = ({ bearerProp, usernameProp }) => {
   // eslint-disable-next-line no-unused-vars
@@ -11,16 +12,23 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const apiLogin = "/api/auth/login";
-  const submitted = (e) => {
-    e.preventDefault();
+  const style = {
+    marginTop: 200,
+  };
+
+  const textFieldStyle = {
+    width: "600px",
+  };
+
+  const submitted = (event) => {
+    const apiLogin = "/api/auth/login";
+    event.preventDefault();
     const requestOptions = {
       auth: {
         username: username,
         password: password,
       },
     };
-    // console.log(user);
     axios.post(apiLogin, {}, requestOptions).then((response) => {
       setBearer("Bearer " + response.data);
       setUsername(username);
@@ -28,25 +36,38 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
     });
   };
   return (
-    <div className="login-page-container">
-      <div className="login-page-content">
-        Login Page
-        <form onSubmit={submitted}>
-          <input
+    <>
+      <Grid style={style} container spacing={6}>
+        <Grid item xs={12}>
+          Login
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            style={textFieldStyle}
+            color="primary"
+            label="username"
+            variant="outlined"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
-            placeholder="username"
           />
-          <input
-            value={password}
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            style={textFieldStyle}
             type="password"
+            label="password"
+            variant="outlined"
+            value={password}
             onChange={(event) => setPassword(event.target.value)}
-            placeholder="password"
           />
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    </div>
+        </Grid>
+        <Grid item xs={12}>
+          <Button onClick={submitted} variant="outlined">
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 LoginPage.propTypes = {
