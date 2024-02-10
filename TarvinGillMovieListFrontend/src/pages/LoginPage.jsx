@@ -16,10 +16,6 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
     marginTop: 200,
   };
 
-  const textFieldStyle = {
-    width: "600px",
-  };
-
   const submitted = (event) => {
     const apiLogin = "/api/auth/login";
     event.preventDefault();
@@ -42,28 +38,21 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
       </Grid>
       <Grid item xs={12}>
         <TextField
-          style={textFieldStyle}
-          color="primary"
           label="username"
-          variant="outlined"
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
       </Grid>
       <Grid item xs={12}>
         <TextField
-          style={textFieldStyle}
           type="password"
           label="password"
-          variant="outlined"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
       </Grid>
       <Grid item xs={12}>
-        <Button onClick={submitted} variant="outlined">
-          Submit
-        </Button>
+        <Button onClick={submitted}>Submit</Button>
       </Grid>
     </Grid>
   );

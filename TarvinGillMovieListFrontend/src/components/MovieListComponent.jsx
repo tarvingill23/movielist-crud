@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditOutlined, SaveOutlined } from "@mui/icons-material";
-import { Button, ButtonGroup, Grid } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Grid,
+  IconButton,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
 
@@ -16,6 +24,10 @@ const MovieListComponent = ({ usernameProp }) => {
   const [title, setTitle] = useState("");
   const [user, setUser] = useState({});
 
+  const [open, setOpen] = useState(false);
+  const confirmDelete = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const [movieOptions, setMovieOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -24,6 +36,18 @@ const MovieListComponent = ({ usernameProp }) => {
 
   const { listId } = useParams();
   const navigate = useNavigate();
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
   // Loading individual movie list
   useEffect(() => {
@@ -47,19 +71,16 @@ const MovieListComponent = ({ usernameProp }) => {
   // Deleting a movielist
   const deleteList = () => {
     const apiDelete = `/api/movielists/${listId}`;
-    let text = "Are you sure you want to delete this list";
-    if (confirm(text) === true) {
-      setButtonLoading(true);
-      axios
-        .delete(apiDelete)
-        .then(() => {
-          setButtonLoading(false);
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log("Unable to delete list", error);
-        });
-    }
+    setButtonLoading(true);
+    axios
+      .delete(apiDelete)
+      .then(() => {
+        setButtonLoading(false);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("Unable to delete list", error);
+      });
   };
 
   // Update a movielist
@@ -79,7 +100,6 @@ const MovieListComponent = ({ usernameProp }) => {
           setButtonLoading(false);
         }, 1000);
         navigate("/");
-        navigate("/mylists");
       })
       .catch((error) => {
         console.log("Unable to update list", error);
@@ -133,7 +153,7 @@ const MovieListComponent = ({ usernameProp }) => {
   };
 
   const editingButtons = [
-    { id: 1, name: "Delete List", action: deleteList },
+    { id: 1, name: "Delete List", action: confirmDelete },
     { id: 2, name: "Update List", action: updateList },
     { id: 3, name: "Cancel", action: () => navigate("/") },
   ];
@@ -143,23 +163,27 @@ const MovieListComponent = ({ usernameProp }) => {
   } else {
     return (
       <div key={movielist.listId} className="list-container">
-        {showEditIcon && (
-          <Button onClick={toggleEditMode}>
-            <EditOutlined />
-          </Button>
-        )}
+        <Grid justifyContent={"end"} container>
+          <Grid>
+            {showEditIcon && (
+              <IconButton style={{ margin: "20px" }} onClick={toggleEditMode}>
+                <EditOutlined />
+              </IconButton>
+            )}
+          </Grid>
+        </Grid>
         {editingMode && (
-          <>
-            <div>
-              <input
-                className="editing-input"
-                value={title}
-                placeholder={movielist.title}
-                onChange={(event) => setTitle(event.target.value)}
-              />
-            </div>
-
-            <Grid justifyContent={"space-around"} container>
+          <Grid spacing={4} justifyContent={"space-around"} container>
+            <Grid xs={12} item>
+              <div>
+                <TextField
+                  placeholder={movielist.title}
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                />
+              </div>
+            </Grid>
+            <Grid xs={12} item>
               <ButtonGroup>
                 {editingButtons.map((button) => {
                   return (
@@ -175,16 +199,44 @@ const MovieListComponent = ({ usernameProp }) => {
                   );
                 })}
               </ButtonGroup>
+              <Modal open={open}>
+                <Grid
+                  rowSpacing={4}
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  container
+                  sx={style}
+                >
+                  <Grid xs={12} item>
+                    <Typography variant="p">
+                      Are you sure you want to delete this list?
+                    </Typography>
+                  </Grid>
+                  <Grid xs={6} item>
+                    <Button onClick={deleteList}>Yes</Button>
+                  </Grid>
+                  <Grid xs={6} item>
+                    <Button onClick={handleClose}>No</Button>
+                  </Grid>
+                </Grid>
+              </Modal>
             </Grid>
-          </>
+          </Grid>
         )}
-
-        <div>
-          <h1>{title}</h1>
-          <p>{`created by: ${movielist.user.username}`}</p>
-          <p>{`created on: ${parseDate(movielist.dateCreated)}`}</p>
-          <p>{`last modified on: ${parseDate(movielist.dateModified)}`}</p>
-        </div>
+        <Grid direction={"column"} container>
+          <Grid>
+            <h1>{title}</h1>
+          </Grid>
+          <Grid>
+            <p>{`created by: ${movielist.user.username}`}</p>
+          </Grid>
+          <Grid>
+            <p>{`created on: ${parseDate(movielist.dateCreated)}`}</p>
+          </Grid>
+          <Grid>
+            <p>{`last modified on: ${parseDate(movielist.dateModified)}`}</p>
+          </Grid>
+        </Grid>
 
         <div>
           <Movie

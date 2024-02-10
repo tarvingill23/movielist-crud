@@ -3,6 +3,7 @@ import { Remove, Star } from "@mui/icons-material";
 import "../assets/styles/components/MovieComponent.css";
 import Director from "./DirectorComponent";
 import Actor from "./ActorComponent";
+import { Button } from "@mui/material";
 
 const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
   const renderStars = (movie) => {
@@ -25,9 +26,9 @@ const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
       <div>
         {/* Passes the movie object back to parent */}
         {editMode && (
-          <button onClick={() => removeMovie(movie)} className="delete-icon">
+          <Button onClick={() => removeMovie(movie)}>
             <Remove />
-          </button>
+          </Button>
         )}
 
         <div className="star-rating">{renderStars(movie)}</div>

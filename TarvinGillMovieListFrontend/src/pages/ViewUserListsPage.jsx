@@ -17,7 +17,7 @@ const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
           <Typography variant="h3">{"No Lists To See"}</Typography>
         </Grid>
       )}
-      <Grid>
+      <Grid item xs={12}>
         <MovieListCardComponent movieLists={userMovielistsProp} />
       </Grid>
     </Grid>

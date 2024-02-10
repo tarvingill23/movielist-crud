@@ -16,6 +16,27 @@ const theme = createTheme({
       main: "#FFFFFF",
     },
   },
+  typography: {
+    button: {
+      textTransform: "none",
+    },
+  },
+  components: {
+    MuiButton: {
+      defaultProps: {
+        variant: "outlined",
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiInputBase-root": {
+            width: "600px",
+          },
+        },
+      },
+    },
+  },
 });
 
 function App() {

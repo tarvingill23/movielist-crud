@@ -19,7 +19,7 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
   };
 
   const gridStyle = {
-    padding: "0px 20px 0px 20px",
+    padding: "0px 60px 0px 60px",
   };
 
   const showBadge = (modifiedDate) => {

@@ -33,10 +33,12 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
   }, [setUserMovielists, usernameProp]);
   return (
     <Grid style={gridStyle} container>
-      <MovieListCardComponent
-        movieLists={movielists}
-        sectionTitle={"Check out these lists"}
-      />
+      <Grid item xs={12}>
+        <MovieListCardComponent
+          movieLists={movielists}
+          sectionTitle={"Check out these lists"}
+        />
+      </Grid>
     </Grid>
   );
 };
