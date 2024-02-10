@@ -1,4 +1,5 @@
 import { AccountCircle, HomeOutlined } from "@mui/icons-material";
+import CreateListModal from "./CreateListModal";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -24,10 +25,11 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
   };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [openCreateList, setOpenCreateList] = useState(false);
+
   const toggleDrawer = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
   const headerStyle = {
     display: "flex",
     height: "100px",
@@ -77,6 +79,9 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
         </Grid>
         {bearerProp && (
           <Grid item>
+            <CreateListModal
+              createListProp={[openCreateList, setOpenCreateList]}
+            />
             <IconButton onClick={toggleDrawer}>
               <AccountCircle />
             </IconButton>
