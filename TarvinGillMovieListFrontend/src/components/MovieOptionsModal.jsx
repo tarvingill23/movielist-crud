@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
 import { AddOutlined, CloseOutlined } from "@mui/icons-material";
+import RenderStarsComponent from "./RenderStarsComponent";
 import {
   IconButton,
   Grid,
@@ -11,17 +11,33 @@ import {
   Dialog,
   Toolbar,
   Typography,
+  Snackbar,
 } from "@mui/material";
 
 const cardStyle = {
   cursor: "pointer",
-  maxWidth: 300,
-  height: 300,
 };
-const MovieOptionsModal = ({ movies, addMovie }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const dialogStyle = {
+  padding: "40px",
+};
+const imageStyle = {
+  padding: "20px",
+};
+const addButtonStyle = {
+  width: "20%",
+
+  margin: "50px 0 50px 0",
+};
+const MovieOptionsModal = ({
+  movies,
+  addMovie,
+  openDialogProp,
+  snackBarProp,
+}) => {
+  const [openDialog, setOpenDialog] = openDialogProp;
+  const [openSnackbar, setOpenSnackbar] = snackBarProp;
+  const handleOpen = (param) => param(true);
+  const handleClose = (param) => param(false);
 
   return (
     <>
@@ -30,30 +46,45 @@ const MovieOptionsModal = ({ movies, addMovie }) => {
           <Button
             color="primary"
             variant="outlined"
-            fullWidth
-            onClick={handleOpen}
+            sx={addButtonStyle}
+            onClick={() => handleOpen(setOpenDialog)}
           >
             <AddOutlined />
           </Button>
         </Grid>
-        <Dialog fullScreen open={open} onClose={handleClose}>
+        <Dialog
+          fullScreen
+          open={openDialog}
+          onClose={() => handleClose(setOpenDialog)}
+        >
           <Toolbar>
-            <IconButton onClick={handleClose} aria-label="close">
+            <IconButton
+              onClick={() => handleClose(setOpenDialog)}
+              aria-label="close"
+            >
               <CloseOutlined />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Movies
             </Typography>
           </Toolbar>
-          <Grid container spacing={4}>
+          <Grid sx={dialogStyle} direction={"row"} container spacing={6}>
             {movies.map((movie) => {
               return (
-                <Grid key={movie.movieId} item xs={12}>
+                <Grid key={movie.movieId} item xs={4}>
+                  <Snackbar
+                    open={openSnackbar}
+                    autoHideDuration={5000}
+                    onClose={() => handleClose(setOpenSnackbar)}
+                    message="Movie already exists in the list"
+                  />
                   <Card sx={cardStyle} raised onClick={() => addMovie(movie)}>
-                    <CardHeader title={movie.title}></CardHeader>
+                    <RenderStarsComponent movie={movie} />
+                    <CardHeader subheader={movie.title}></CardHeader>
+
                     <CardMedia
+                      sx={imageStyle}
                       component="img"
-                      height="400"
                       image={movie.posterImage}
                       alt={movie.title}
                     />
@@ -70,6 +101,8 @@ const MovieOptionsModal = ({ movies, addMovie }) => {
 MovieOptionsModal.propTypes = {
   movies: PropTypes.array.isRequired,
   addMovie: PropTypes.func,
+  openDialogProp: PropTypes.array,
+  snackBarProp: PropTypes.array,
 };
 
 export default MovieOptionsModal;

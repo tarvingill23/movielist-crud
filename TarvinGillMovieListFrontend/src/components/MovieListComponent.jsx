@@ -25,15 +25,18 @@ const MovieListComponent = ({ usernameProp }) => {
   const [user, setUser] = useState({});
   const [selectedIds, setSelectedIds] = useState([]);
 
-  const [open, setOpen] = useState(false);
-  const confirmDelete = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openConfirmDelete, setConfirmDelete] = useState(false);
+  const handleOpen = (param) => param(true);
+  const handleClose = (param) => param(false);
 
   const [movieOptions, setMovieOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [showEditIcon, setShowEditIcon] = useState(false);
   const [editingMode, setEditMode] = useState();
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const { listId } = useParams();
   const navigate = useNavigate();
@@ -122,13 +125,12 @@ const MovieListComponent = ({ usernameProp }) => {
   };
   // Add movie based on movieData object passed by child to parent
   const addMovie = (childMovie) => {
-    console.log(selectedIds);
     if (selectedIds.includes(childMovie.movieId)) {
-      console.log("Movie already exists in the list.");
+      setOpenSnackbar(true);
     } else {
-      console.log("Adding movie to the list...");
-      const updatedMovies = [...movies, childMovie];
+      const updatedMovies = [childMovie, ...movies];
       setMovies(updatedMovies);
+      setOpenDialog(false);
     }
   };
 
@@ -165,76 +167,83 @@ const MovieListComponent = ({ usernameProp }) => {
   };
 
   const editingButtons = [
-    { id: 1, name: "Delete List", action: confirmDelete },
+    {
+      id: 1,
+      name: "Delete List",
+      action: () => handleOpen(setConfirmDelete),
+    },
     { id: 2, name: "Update List", action: updateList },
     { id: 3, name: "Cancel", action: () => navigate("/") },
   ];
 
   if (loading) {
     return <div className="list-container">...Loading</div>;
-  } else {
-    return (
-      <div key={movielist.listId} className="list-container">
-        <Grid justifyContent={"end"} container>
-          <Grid>
-            {showEditIcon && (
-              <IconButton style={{ margin: "20px" }} onClick={toggleEditMode}>
-                <EditOutlined />
-              </IconButton>
-            )}
+  }
+  return (
+    <div key={movielist.listId} className="list-container">
+      <Grid justifyContent={"end"} container>
+        <Grid>
+          {showEditIcon && (
+            <IconButton style={{ margin: "20px" }} onClick={toggleEditMode}>
+              <EditOutlined />
+            </IconButton>
+          )}
+        </Grid>
+      </Grid>
+      {editingMode && (
+        <Grid spacing={4} justifyContent={"space-around"} container>
+          <Grid xs={12} item>
+            <div>
+              <TextField
+                placeholder={movielist.title}
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+              />
+            </div>
+          </Grid>
+          <Grid xs={12} item>
+            <ButtonGroup>
+              {editingButtons.map((button) => {
+                return (
+                  <LoadingButton
+                    loading={buttonLoading}
+                    loadingPosition="start"
+                    startIcon={<SaveOutlined />}
+                    key={button.id}
+                    onClick={button.action}
+                  >
+                    {button.name}
+                  </LoadingButton>
+                );
+              })}
+            </ButtonGroup>
+            <Modal open={openConfirmDelete}>
+              <Grid
+                rowSpacing={4}
+                textAlign={"center"}
+                justifyContent={"center"}
+                container
+                sx={style}
+              >
+                <Grid xs={12} item>
+                  <Typography variant="p">
+                    Are you sure you want to delete this list?
+                  </Typography>
+                </Grid>
+                <Grid xs={6} item>
+                  <Button onClick={deleteList}>Yes</Button>
+                </Grid>
+                <Grid xs={6} item>
+                  <Button onClick={() => handleClose(setConfirmDelete)}>
+                    No
+                  </Button>
+                </Grid>
+              </Grid>
+            </Modal>
           </Grid>
         </Grid>
-        {editingMode && (
-          <Grid spacing={4} justifyContent={"space-around"} container>
-            <Grid xs={12} item>
-              <div>
-                <TextField
-                  placeholder={movielist.title}
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} item>
-              <ButtonGroup>
-                {editingButtons.map((button) => {
-                  return (
-                    <LoadingButton
-                      loading={buttonLoading}
-                      loadingPosition="start"
-                      startIcon={<SaveOutlined />}
-                      key={button.id}
-                      onClick={button.action}
-                    >
-                      {button.name}
-                    </LoadingButton>
-                  );
-                })}
-              </ButtonGroup>
-              <Modal open={open}>
-                <Grid
-                  rowSpacing={4}
-                  textAlign={"center"}
-                  justifyContent={"center"}
-                  container
-                  sx={style}
-                >
-                  <Grid xs={12} item>
-                    <Typography variant="p">
-                      Are you sure you want to delete this list?
-                    </Typography>
-                  </Grid>
-                  <Grid xs={6} item>
-                    <Button onClick={deleteList}>Yes</Button>
-                  </Grid>
-                  <Grid xs={6} item>
-                    <Button onClick={handleClose}>No</Button>
-                  </Grid>
-                </Grid>
-              </Modal>
-            </Grid>
-          </Grid>
-        )}
+      )}
+      {!editingMode && (
         <Grid direction={"column"} container>
           <Grid>
             <h1>{title}</h1>
@@ -249,22 +258,30 @@ const MovieListComponent = ({ usernameProp }) => {
             <p>{`last modified on: ${parseDate(movielist.dateModified)}`}</p>
           </Grid>
         </Grid>
-
-        <div>
-          <Movie
-            removeMovie={removeMovie}
-            editMode={editingMode}
-            movies={movies}
-            parseDate={parseDate}
-          />
-        </div>
-
-        <div>
-          <MovieOptionsModal movies={movieOptions} addMovie={addMovie} />
-        </div>
+      )}
+      {editingMode && (
+        <MovieOptionsModal
+          openDialogProp={[openDialog, setOpenDialog]}
+          snackBarProp={[openSnackbar, setOpenSnackbar]}
+          movies={movieOptions}
+          addMovie={addMovie}
+        />
+      )}
+      {movies.length === 0 && (
+        <Typography sx={{ margin: "100px 0 100px 0" }} variant="h5">
+          Add your first movie now!
+        </Typography>
+      )}
+      <div>
+        <Movie
+          removeMovie={removeMovie}
+          editMode={editingMode}
+          movies={movies}
+          parseDate={parseDate}
+        />
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 MovieListComponent.propTypes = {

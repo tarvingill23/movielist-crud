@@ -1,26 +1,12 @@
-import { Remove, Star } from "@mui/icons-material";
+import { Remove } from "@mui/icons-material";
 
 import "../assets/styles/components/MovieComponent.css";
 import Director from "./DirectorComponent";
 import Actor from "./ActorComponent";
 import { Button } from "@mui/material";
+import RenderStarsComponent from "./RenderStarsComponent";
 
 const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
-  const renderStars = (movie) => {
-    const items = [];
-    let isGold;
-    for (let i = 0; i < 5; i++) {
-      i < movie.rating ? (isGold = true) : (isGold = false);
-      const dynamicClass = isGold ? "star-gold" : "star";
-      items.push(
-        <div key={i} className={dynamicClass}>
-          <Star />
-        </div>
-      );
-    }
-    return items;
-  };
-
   return movies.map((movie) => (
     <div key={movie.movieId} className="movie-div">
       <div>
@@ -31,7 +17,9 @@ const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
           </Button>
         )}
 
-        <div className="star-rating">{renderStars(movie)}</div>
+        <div className="star-rating">
+          <RenderStarsComponent movie={movie} />
+        </div>
         <img className="poster-img" src={movie.posterImage} alt="" />
       </div>
       <div className="gap"></div>
