@@ -13,6 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 
+const cardStyle = {
+  cursor: "pointer",
+  maxWidth: 300,
+  height: 300,
+};
 const MovieOptionsModal = ({ movies, addMovie }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -44,11 +49,7 @@ const MovieOptionsModal = ({ movies, addMovie }) => {
             {movies.map((movie) => {
               return (
                 <Grid key={movie.movieId} item xs={12}>
-                  <Card
-                    raised
-                    onClick={() => addMovie(movie)}
-                    sx={{ maxWidth: 300, height: 300 }}
-                  >
+                  <Card sx={cardStyle} raised onClick={() => addMovie(movie)}>
                     <CardHeader title={movie.title}></CardHeader>
                     <CardMedia
                       component="img"

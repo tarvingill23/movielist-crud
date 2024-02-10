@@ -23,6 +23,7 @@ const MovieListComponent = ({ usernameProp }) => {
   const [movies, setMovies] = useState(movielist.movies);
   const [title, setTitle] = useState("");
   const [user, setUser] = useState({});
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const [open, setOpen] = useState(false);
   const confirmDelete = () => setOpen(true);
@@ -67,6 +68,12 @@ const MovieListComponent = ({ usernameProp }) => {
         console.log("Unable to load data", error);
       });
   }, [listId]);
+
+  useEffect(() => {
+    if (movies) {
+      setSelectedIds(movies.map((movie) => movie.movieId));
+    }
+  }, [movies]);
 
   // Deleting a movielist
   const deleteList = () => {
@@ -115,9 +122,14 @@ const MovieListComponent = ({ usernameProp }) => {
   };
   // Add movie based on movieData object passed by child to parent
   const addMovie = (childMovie) => {
-    let updatedMovies = movies;
-    updatedMovies.push(childMovie);
-    setMovies(updatedMovies);
+    console.log(selectedIds);
+    if (selectedIds.includes(childMovie.movieId)) {
+      console.log("Movie already exists in the list.");
+    } else {
+      console.log("Adding movie to the list...");
+      const updatedMovies = [...movies, childMovie];
+      setMovies(updatedMovies);
+    }
   };
 
   // Load all movies
@@ -131,7 +143,7 @@ const MovieListComponent = ({ usernameProp }) => {
       .catch((error) => {
         console.log("Unable to load data", error);
       });
-  }, []);
+  }, [selectedIds]);
 
   useEffect(() => {
     // optional chaining to handle undefined and null values
