@@ -100,7 +100,7 @@ const MovieListComponent = ({ usernameProp }) => {
       listId,
       title,
       movies,
-      user, // never changes
+      user,
     };
     setButtonLoading(true);
     axios
@@ -173,7 +173,7 @@ const MovieListComponent = ({ usernameProp }) => {
       action: () => handleOpen(setConfirmDelete),
     },
     { id: 2, name: "Update List", action: updateList },
-    { id: 3, name: "Cancel", action: () => navigate("/") },
+    { id: 3, name: "Cancel", action: () => navigate(-1) },
   ];
 
   if (loading) {

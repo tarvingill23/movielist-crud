@@ -80,6 +80,8 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
         {bearerProp && (
           <Grid item>
             <CreateListModal
+              bearerProp={bearerProp}
+              usernameProp={usernameProp}
               createListProp={[openCreateList, setOpenCreateList]}
             />
             <IconButton onClick={toggleDrawer}>

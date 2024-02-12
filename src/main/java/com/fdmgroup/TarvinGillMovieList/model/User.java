@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.hibernate.annotations.Immutable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,14 +18,16 @@ public class User {
 	@Id
 	@GeneratedValue
 	@Column(name = "user_id", nullable=false, unique=true)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private int userId;
 	@Column(nullable = false)
 	@Immutable
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String email;
 	@Column(nullable = false)
 	private String username;
 	@Column(nullable = false)
-	 @JsonIgnore
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
 	@OneToMany(mappedBy="user", cascade= CascadeType.ALL)

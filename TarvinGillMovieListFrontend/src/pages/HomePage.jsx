@@ -30,7 +30,7 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
       .catch((error) => {
         console.log("Unable to load data", error);
       });
-  }, [setUserMovielists, usernameProp]);
+  }, [setUserMovielists, usernameProp, userMovielistsProp]);
   return (
     <Grid style={gridStyle} container>
       <Grid item xs={12}>

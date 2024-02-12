@@ -108,11 +108,13 @@ public class MovieList {
 	/**
 	 * TO STRING METHOD
 	 */
-	
+
 	@Override
 	public String toString() {
-		return "List [listId=" + listId + ", title=" + title + ", dateCreated=" + dateCreated + ", dateModified="
-				+ dateModified + "]";
+		return "MovieList [listId=" + listId + ", title=" + title + ", dateCreated=" + dateCreated + ", dateModified="
+				+ dateModified + ", movies=" + movies + ", user=" + user + "]";
 	}
+	
+	
 
 }

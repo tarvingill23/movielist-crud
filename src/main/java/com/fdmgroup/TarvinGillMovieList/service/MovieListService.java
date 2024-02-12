@@ -12,15 +12,18 @@ import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
+import com.fdmgroup.TarvinGillMovieList.model.User;
 
 @Service
 public class MovieListService {
 	private MovieListRepository mvRepo;
+	private UserRepository userRepo;
 
 	@Autowired
-	public MovieListService(MovieListRepository mvRepo) {
+	public MovieListService(MovieListRepository mvRepo, UserRepository userRepo) {
 		super();
 		this.mvRepo = mvRepo;
+		this.userRepo = userRepo;
 	}
 
 	public List<MovieList> findAll() {
@@ -37,10 +40,16 @@ public class MovieListService {
 			throw new NotFoundException("Movie list with ID: " + mvList.getListId()
 					+ " exists");
 		}
-		// ensures that the dates are correct when list is created regardless of input
+		
+		// details the backend should handle instead of user are correct when list is created regardless of input
+		Optional<User> opUser = this.userRepo.findByUsername(mvList.getUser().getUsername());
+		User foundUser = opUser.get();
+	
+		mvList.setUser(foundUser);
 		mvList.setDateCreated(new Timestamp(System.currentTimeMillis()));
 		mvList.setDateModified(new Timestamp(System.currentTimeMillis()));
-		this.mvRepo.save(mvList);
+		
+		this.mvRepo.saveAndFlush(mvList);
 	}
 
 	public void update(MovieList mvList) {

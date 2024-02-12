@@ -24,8 +24,6 @@ public class AuthUserService implements org.springframework.security.core.userde
 		User user = this.userRepo.findByUsername(username).orElseThrow(
 				()-> new UsernameNotFoundException(username));
 		return new AuthUser(user);
-	}
-	
-	
+	}	
 
 }

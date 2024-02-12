@@ -37,7 +37,7 @@ public class MovieListController {
 		return mlService.findById(listId);
 	}
 
-	@PostMapping("movielists")
+	@PostMapping("movielists-post")
 	public void addMovieList(@RequestBody MovieList mvList) {
 		mlService.createList(mvList);
 	}
