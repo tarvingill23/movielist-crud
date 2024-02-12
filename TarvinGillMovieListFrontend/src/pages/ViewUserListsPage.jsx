@@ -3,7 +3,7 @@ import MovieListCardComponent from "../components/MovieListCardComponent";
 import PropTypes from "prop-types";
 const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
   const style = {
-    marginTop: "200px",
+    marginTop: "100px",
   };
   return (
     <Grid style={style} container>

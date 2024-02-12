@@ -36,11 +36,6 @@ private UserService userService;
 		return userService.findById(userId);
 	}
 	
-	@PostMapping("login")
-	public Optional<User> verifyUser(@RequestBody User user) {
-		return userService.verifyUser(user);
-	}
-	
 	@PostMapping("users")
 	public void addUser(@RequestBody User newUser) {
 		userService.save(newUser);

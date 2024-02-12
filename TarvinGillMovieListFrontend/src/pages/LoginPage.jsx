@@ -3,13 +3,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import axios from "axios";
-import { TextField, Grid, Button } from "@mui/material";
+import { TextField, Grid, Button, FormHelperText } from "@mui/material";
 
 const LoginPage = ({ bearerProp, usernameProp }) => {
   // eslint-disable-next-line no-unused-vars
   const [bearer, setBearer] = bearerProp;
   const [username, setUsername] = usernameProp;
-  const [password, setPassword] = useState("password123");
+
+  const [errorMessage, setErrorMessage] = useState();
+
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,16 +34,32 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
         password: password,
       },
     };
-    axios.post(apiLogin, {}, requestOptions).then((response) => {
-      setBearer("Bearer " + response.data);
-      setUsername(username);
-      navigate("/");
-    });
+    axios
+      .post(apiLogin, {}, requestOptions)
+      .then((response) => {
+        setBearer("Bearer " + response.data);
+        setUsername(username);
+        navigate("/");
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          setErrorMessage(
+            "Incorrect credentials. Please check username or password again"
+          );
+        } else {
+          setErrorMessage("");
+        }
+      });
   };
   return (
-    <Grid style={style} container spacing={6}>
+    <Grid justifyContent="center" style={style} container spacing={6}>
       <Grid item xs={12}>
         Login
+      </Grid>
+      <Grid item>
+        <FormHelperText error={errorMessage != ""}>
+          {errorMessage}
+        </FormHelperText>
       </Grid>
       <Grid item xs={12}>
         <TextField
@@ -58,7 +77,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
         />
       </Grid>
       <Grid item xs={12}>
-        <Button onClick={submitted}>Submit</Button>
+        <Button onClick={submitted}>Login</Button>
       </Grid>
     </Grid>
   );

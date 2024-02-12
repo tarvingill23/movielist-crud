@@ -25,29 +25,17 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	// done
 	public List<User> findAll() {
 		return this.userRepository.findAll();
 	}
 
-	// done
+
 	public Optional<User> findById(int userId) {
 		checkUserExists(userId);
 		return this.userRepository.findById(userId);
 	}
 
-	public Optional<User> verifyUser(User user) {
-		if (userRepository.existsByEmail(user.getEmail())) {
-			Optional<User> foundOpUser = userRepository.findByEmail(user.getEmail());
-			User foundUser = foundOpUser.get();
-			if (foundUser.getPassword().equals(user.getPassword())) {
-				return this.userRepository.findById(foundUser.getUserId());
-			}
-		}
-		throw new NotFoundException("User with email " + user.getEmail() + " not found");
-	}
-
-	// done
+	
 	public void save(User newUser) {
 		if (userRepository.existsById(newUser.getUserId())) {
 			throw new ConflictException("User with ID: " + newUser.getUserId() + " exists");
