@@ -94,6 +94,10 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
         )}
         {!bearerProp && (
           <Grid item>
+            <Link style={{ margin: "8px" }} to={"/signup"}>
+              <Typography variant="p">Sign Up</Typography>
+            </Link>
+
             <Link to={"/login"}>
               <Typography variant="p">Log In</Typography>
             </Link>

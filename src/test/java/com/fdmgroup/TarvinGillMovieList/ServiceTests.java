@@ -36,6 +36,9 @@ public class ServiceTests {
 	@Mock
 	MovieListRepository mlRepo;
 	
+	@Mock
+	UserRepository userRepo;
+	
 	@Autowired
 	MovieListService mlService;
 
@@ -57,7 +60,7 @@ public class ServiceTests {
 	@BeforeEach
 	public void setup() {
 		userService = new UserService(userRepository, passwordEncoder);
-		mlService = new MovieListService(mlRepo);
+		mlService = new MovieListService(mlRepo, userRepo);
 		
 
 		user1 = new User("johndoe@gmail.com", "johndoe9812", "password1234");

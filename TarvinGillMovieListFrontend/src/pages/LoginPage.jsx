@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import axios from "axios";
@@ -11,10 +11,16 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
   const [username, setUsername] = usernameProp;
   const [password, setPassword] = useState("password123");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const style = {
     marginTop: 200,
   };
+
+  if (location.state) {
+    console.log(location.state.key);
+    setUsername(location.state.key);
+  }
 
   const submitted = (event) => {
     const apiLogin = "/api/auth/login";

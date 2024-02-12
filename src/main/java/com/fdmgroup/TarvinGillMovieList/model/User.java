@@ -18,11 +18,9 @@ public class User {
 	@Id
 	@GeneratedValue
 	@Column(name = "user_id", nullable=false, unique=true)
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private int userId;
 	@Column(nullable = false)
 	@Immutable
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String email;
 	@Column(nullable = false)
 	private String username;

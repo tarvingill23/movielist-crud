@@ -7,14 +7,14 @@ const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
   };
   return (
     <Grid style={style} container>
-      {bearerProp && (
+      {bearerProp && userMovielistsProp.length > 1 && (
         <Grid xs={12} item>
           <Typography variant="h3">{`${usernameProp} lists`}</Typography>
         </Grid>
       )}
-      {!bearerProp && (
+      {bearerProp && userMovielistsProp.length < 1 && (
         <Grid xs={12} item>
-          <Typography variant="h3">{"No Lists To See"}</Typography>
+          <Typography variant="h3">{"No lists to see"}</Typography>
         </Grid>
       )}
       <Grid item xs={12}>

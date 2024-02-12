@@ -8,6 +8,7 @@ import MovieListComponent from "./components/MovieListComponent";
 import ViewUserListsPage from "./pages/ViewUserListsPage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import SignUpPage from "./pages/SignUpPage";
 
 const theme = createTheme({
   palette: {
@@ -72,6 +73,7 @@ function App() {
               />
             }
           />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route
             path="/mylists"
             element={

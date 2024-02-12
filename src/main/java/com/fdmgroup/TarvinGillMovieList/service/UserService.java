@@ -53,12 +53,12 @@ public class UserService {
 			throw new ConflictException("User with ID: " + newUser.getUserId() + " exists");
 		}
 		if (userRepository.existsByEmail(newUser.getEmail())) {
-			throw new ConflictException("User with email " + newUser.getEmail() + " already exists, please login");
+			throw new ConflictException("User with email " + newUser.getEmail() + " already exists, please login with your associated username");
 		}
 		if (userRepository.existsByUsername(newUser.getUsername())) {
-			throw new ConflictException("This username has been taken, please type in another username");
+			throw new ConflictException( newUser.getUsername() + " has been taken, please type in another username");
 		}
-		this.userRepository.save(newUser);
+		register(newUser);
 	}
 
 	public void update(User newUser) {
@@ -96,12 +96,10 @@ public class UserService {
 		}
 	}
 
-	public void register(List<User> users) {
+	public void register(User user) {
         //Hash(encode) the password
-		for(User user: users) {
 	        String hashedPassword = passwordEncoder.encode(user.getPassword());
 	        user.setPassword(hashedPassword);
 	        this.userRepository.save(user);
-		}
     }
 }

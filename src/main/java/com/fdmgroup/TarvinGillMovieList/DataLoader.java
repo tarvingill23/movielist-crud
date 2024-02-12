@@ -311,7 +311,8 @@ public class DataLoader implements ApplicationRunner{
 		personnelRepo.saveAll(personnel);
 		actorRepo.saveAll(actors);
 		directorRepo.saveAll(directors);
-		userService.register(users);
+		userService.register(user1);
+		userService.register(user2);
 		movieRepo.saveAll(movies);
 		mlRepo.saveAll(movieLists);
 	}
