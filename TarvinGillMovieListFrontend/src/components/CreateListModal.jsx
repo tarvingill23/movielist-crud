@@ -48,6 +48,7 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
         <Grid textAlign={"center"} justifyContent={"center"} container>
           <Grid xs={12} item>
             <TextField
+              sx={{ width: "600px" }}
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               placeholder="List title"

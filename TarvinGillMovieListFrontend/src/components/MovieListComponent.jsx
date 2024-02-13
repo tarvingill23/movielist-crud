@@ -146,7 +146,6 @@ const MovieListComponent = ({ usernameProp }) => {
     moviesAfter.unshift(movie);
 
     updatedMovies = [...moviesBefore, ...moviesAfter];
-    console.log(updatedMovies);
     setMovies(updatedMovies);
   };
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fdmgroup.TarvinGillMovieList.model.Movie;
@@ -33,6 +34,11 @@ public class MovieController {
 	@GetMapping ("movies/{movieId}")
 	public Optional<Movie> getMovieById(@PathVariable int movieId) {
 		return this.movieService.getMovieById(movieId);
+	}
+	
+	@GetMapping("/movies/search")
+	public List<Movie> searchByName(@RequestParam String q){
+		return movieService.getPartialMatches(q);
 	}
 	
 	@PostMapping ("movies")

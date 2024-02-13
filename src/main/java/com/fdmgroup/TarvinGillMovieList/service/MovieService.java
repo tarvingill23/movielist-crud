@@ -10,6 +10,7 @@ import com.fdmgroup.TarvinGillMovieList.dal.MovieRepository;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Movie;
 
+
 @Service
 public class MovieService {
 	private MovieRepository movieRepo;
@@ -27,6 +28,10 @@ public class MovieService {
 	public Optional<Movie> getMovieById(int movieId) {
 		checkMovieExists(movieId);
 		return this.movieRepo.findById(movieId);
+	}
+	
+	public List<Movie> getPartialMatches(String q) {
+		return movieRepo.findPartialMatch(q);	
 	}
 
 	public void addMovie(Movie movie) {
