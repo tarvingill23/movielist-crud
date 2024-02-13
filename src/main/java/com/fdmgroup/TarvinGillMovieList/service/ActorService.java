@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.ActorRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.PersonnelRepository;
-import com.fdmgroup.TarvinGillMovieList.exceptions.ConflictException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Actor;
-import com.fdmgroup.TarvinGillMovieList.model.Personnel;
+
 
 @Service
 public class ActorService {

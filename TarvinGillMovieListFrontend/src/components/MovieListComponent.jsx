@@ -60,7 +60,7 @@ const MovieListComponent = ({ usernameProp }) => {
       .get(apiGet)
       .then((response) => {
         setMovielist(response.data);
-        setMovies(response.data.movies.sort((a, b) => b.rating - a.rating)); // sorts descending by rating by default
+        setMovies(response.data.movies); // sorts movies based on order of entry in database
         setTitle(response.data.title);
         setUser(response.data.user);
       })
@@ -134,6 +134,22 @@ const MovieListComponent = ({ usernameProp }) => {
     }
   };
 
+  const changeRank = (newRank, initialRank, movie) => {
+    let updatedMovies = movies;
+
+    updatedMovies.splice(initialRank - 1, 1);
+
+    let moviesBefore = updatedMovies.slice(0, newRank - 1);
+
+    let moviesAfter = updatedMovies.slice(newRank - 1, updatedMovies.length);
+
+    moviesAfter.unshift(movie);
+
+    updatedMovies = [...moviesBefore, ...moviesAfter];
+    console.log(updatedMovies);
+    setMovies(updatedMovies);
+  };
+
   // Load all movies
   useEffect(() => {
     const apiGetAll = "/api/movies";
@@ -195,6 +211,7 @@ const MovieListComponent = ({ usernameProp }) => {
           <Grid xs={12} item>
             <div>
               <TextField
+                sx={{ width: "600px" }}
                 placeholder={movielist.title}
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
@@ -272,12 +289,14 @@ const MovieListComponent = ({ usernameProp }) => {
           Add your first movie now!
         </Typography>
       )}
+
       <div>
         <Movie
           removeMovie={removeMovie}
           editMode={editingMode}
           movies={movies}
           parseDate={parseDate}
+          changeRank={changeRank}
         />
       </div>
     </div>

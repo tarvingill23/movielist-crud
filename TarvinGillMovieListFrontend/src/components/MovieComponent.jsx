@@ -1,20 +1,42 @@
-import { Remove } from "@mui/icons-material";
-
+import { DeleteOutline } from "@mui/icons-material";
 import "../assets/styles/components/MovieComponent.css";
 import Director from "./DirectorComponent";
 import Actor from "./ActorComponent";
-import { Button } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import RenderStarsComponent from "./RenderStarsComponent";
+import { useEffect } from "react";
 
-const Movie = ({ movies, editMode, removeMovie, parseDate }) => {
-  return movies.map((movie) => (
+const Movie = ({ movies, editMode, removeMovie, parseDate, changeRank }) => {
+  useEffect(() => {}, [movies]);
+  return movies.map((movie, index) => (
     <div key={movie.movieId} className="movie-div">
+      {!editMode && (
+        <div>
+          <Typography variant="h4">{index + 1}</Typography>
+        </div>
+      )}
+      {editMode && (
+        <div>
+          <TextField
+            id="rankingTextField"
+            onChange={(event) =>
+              changeRank(event.target.value, index + 1, movie)
+            }
+            placeholder={(index + 1).toString()}
+            sx={{ width: "50px" }}
+          ></TextField>
+        </div>
+      )}
       <div>
         {/* Passes the movie object back to parent */}
         {editMode && (
-          <Button onClick={() => removeMovie(movie)}>
-            <Remove />
-          </Button>
+          <Grid justifyContent={"end"} container>
+            <Grid item xs={12}>
+              <Button onClick={() => removeMovie(movie)}>
+                <DeleteOutline />
+              </Button>
+            </Grid>
+          </Grid>
         )}
 
         <div className="star-rating">

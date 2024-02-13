@@ -12,20 +12,21 @@ import {
   Toolbar,
   Typography,
   Snackbar,
+  CardContent,
 } from "@mui/material";
 
 const cardStyle = {
   cursor: "pointer",
+  width: "400px",
 };
 const dialogStyle = {
-  padding: "40px",
+  padding: "20px",
 };
 const imageStyle = {
   padding: "20px",
 };
 const addButtonStyle = {
   width: "20%",
-
   margin: "50px 0 50px 0",
 };
 const MovieOptionsModal = ({
@@ -84,11 +85,13 @@ const MovieOptionsModal = ({
 
                     <CardMedia
                       sx={imageStyle}
+                      height="520"
                       component="img"
                       image={movie.posterImage}
                       alt={movie.title}
                     />
                   </Card>
+                  <CardContent></CardContent>
                 </Grid>
               );
             })}

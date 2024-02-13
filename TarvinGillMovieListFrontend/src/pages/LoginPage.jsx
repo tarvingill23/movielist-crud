@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -19,11 +19,15 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
   const style = {
     marginTop: 200,
   };
+  const textFieldStyle = {
+    width: "600px",
+  };
 
-  if (location.state) {
-    console.log(location.state.key);
-    setUsername(location.state.key);
-  }
+  useEffect(() => {
+    if (location.state) {
+      setUsername(location.state.key);
+    }
+  });
 
   const submitted = (event) => {
     const apiLogin = "/api/auth/login";
@@ -63,6 +67,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          sx={textFieldStyle}
           label="username"
           value={username}
           onChange={(event) => setUsername(event.target.value)}
@@ -70,6 +75,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          sx={textFieldStyle}
           type="password"
           label="password"
           value={password}

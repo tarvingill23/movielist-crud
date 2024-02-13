@@ -84,6 +84,9 @@ public class ServiceTests {
 
 	Optional<User> opUser1;
 	
+	Optional<Movie> opMovie1;
+	Optional<Movie> opMovie2;
+	
 	Optional<Personnel> opPerson1;
 	Optional<Personnel> opPerson2;
 	Optional<Personnel> opPerson3;
@@ -113,13 +116,6 @@ public class ServiceTests {
 	Personnel person3;
 	
 	
-	
-	/**
-	 * **************************************
-	 * User Service Tests
-	 * **************************************
-	 */
-	
 	@BeforeEach
 	public void setup() {
 		userService = new UserService(userRepository, passwordEncoder);
@@ -138,15 +134,19 @@ public class ServiceTests {
 
 		opUser1 = Optional.of(new User("johndoe@gmail.com", "johndoe9812", "password1234"));
 		
-		movie1 = new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
+		opMovie1 = Optional.of(new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
 				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
 				4, "Action",
-				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg");
+				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg"));
 		
-		movie2 = new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
+		opMovie2 = Optional.of(new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
 				"While out hunting, Llewelyn finds the grisly aftermath of a drug deal. Though he knows better, he cannot resist the cash left behind and takes it. The hunter becomes the hunted when a merciless killer named Chigurh picks up his trail.",
 				5, "Thriller",
-				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg");
+				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg"));
+		
+		
+		movie1 = opMovie1.get();
+		movie2 = opMovie2.get();
 		
 		opPerson1 = Optional.of(new Personnel("Jon", "Favraeu"));	
 		person1 = opPerson1.get();
@@ -176,6 +176,12 @@ public class ServiceTests {
 		dir2 = opDir2.get();
 		dir2.setDirId(2);
 	}
+	
+	/**
+	 * **************************************
+	 * User Service Tests
+	 * **************************************
+	 */
 
 	@Test
 	public void test_check_if_user_exists_returns_exception() {
@@ -469,39 +475,52 @@ public class ServiceTests {
 	 * **************************************
 	 */
 	
-//	@Test
-//	public void get_all_movies_test() {
-//		List<Movie> movies = new ArrayList<>();
-//		movies.add(new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
-//				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-//				4, "Action",
-//				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg"));
-//		movies.add(new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
-//				"While out hunting, Llewelyn finds the grisly aftermath of a drug deal. Though he knows better, he cannot resist the cash left behind and takes it. The hunter becomes the hunted when a merciless killer named Chigurh picks up his trail.",
-//				5, "Thriller",
-//				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg"));
-//		
-//		System.out.println(movies);
-//
-//		when(movieRepo.findAll()).thenReturn(movies);
-//
-//		List<Movie> foundMovies = new ArrayList<>();
-//		foundMovies = movieService.getAllMovies();
-//		System.out.println(foundMovies);
-//
-//		assertEquals(foundMovies, movies);
-//		verify(movieRepo, times(1)).findAll();
-//	}
-//	
-//	@Test
-//	public void add_new_movie() {
-//		Movie movie1 = new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
-//				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
-//				4, "Action",
-//				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg");
-//		movieService.addMovie(movie1);
-//		verify(movieRepo, times(1)).save(movie1);
-//	}
+	@Test
+	public void get_all_movies_test() {
+		List<Movie> movies = new ArrayList<>();
+		movies.add(movie1);
+		movies.add(movie2);
+
+		when(movieRepo.findAll()).thenReturn(movies);
+
+		List<Movie> foundMovies = new ArrayList<>();
+		foundMovies = movieService.getAllMovies();
+
+		assertEquals(foundMovies, movies);
+		verify(movieRepo, times(1)).findAll();
+	}
+	
+	@Test
+	public void get_movie_by_id() {
+		int id = movie1.getMovieId();
+		when(movieRepo.findById(id)).thenReturn(opMovie1);
+		when(movieRepo.existsById(id)).thenReturn(true);
+		Movie foundMovie = movieService.getMovieById(id).get();
+		assertEquals(movie1, foundMovie);
+	}
+	@Test
+	public void add_new_movie() {
+		int id = movie1.getMovieId();
+		when(movieRepo.existsById(id)).thenReturn(false);
+		movieService.addMovie(movie1);
+		verify(movieRepo, times(1)).save(movie1);
+	}
+	@Test
+	public void update_movie() {
+		int id = movie1.getMovieId();
+
+		when(movieRepo.existsById(id)).thenReturn(true);
+		
+		movieService.updateMovie(movie1);
+		verify(movieRepo, times(1)).save(movie1);
+	}
+	@Test
+	public void delete_movie_by_id() {
+		int id = movie1.getMovieId();
+		when(movieRepo.existsById(id)).thenReturn(true);
+		movieService.deleteMovie(id);
+		verify(movieRepo, times(1)).deleteById(id);
+	}
 	
 	/**	 * **************************************
 	 * Personnel Service Tests

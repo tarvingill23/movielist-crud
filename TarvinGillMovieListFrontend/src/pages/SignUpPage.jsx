@@ -19,6 +19,10 @@ const SignUpPage = () => {
     marginTop: "200px",
   };
 
+  const textFieldStyle = {
+    width: "600px",
+  };
+
   const enableButton = () => {
     if (usernameError === "" && passwordError === "" && emailError === "") {
       if (username != "" && password != "" && email != "") {
@@ -30,7 +34,6 @@ const SignUpPage = () => {
 
   const validatePassword = (value) => {
     setPassword(value);
-    console.log(password);
     if (
       validator.isStrongPassword(value, {
         minLength: 8,
@@ -91,7 +94,6 @@ const SignUpPage = () => {
         ) {
           setUsernameError(error.response.data.message);
         }
-        console.log(error);
       });
   };
   return (
@@ -101,8 +103,8 @@ const SignUpPage = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          sx={textFieldStyle}
           error={usernameError != ""}
-          id="error-message"
           value={username}
           onChange={(event) => validateUsername(event.target.value)}
           label="username"
@@ -111,6 +113,7 @@ const SignUpPage = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          sx={textFieldStyle}
           error={emailError != ""}
           value={email}
           onChange={(event) => validateEmail(event.target.value)}
@@ -120,6 +123,7 @@ const SignUpPage = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          sx={textFieldStyle}
           error={passwordError != ""}
           value={password}
           onChange={(event) => validatePassword(event.target.value)}

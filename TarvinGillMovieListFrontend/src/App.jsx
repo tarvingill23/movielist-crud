@@ -28,15 +28,6 @@ const theme = createTheme({
         variant: "outlined",
       },
     },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& .MuiInputBase-root": {
-            width: "600px",
-          },
-        },
-      },
-    },
   },
 });
 
