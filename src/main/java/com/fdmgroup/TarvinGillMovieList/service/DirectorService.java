@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.DirectorRepository;
+import com.fdmgroup.TarvinGillMovieList.dal.PersonnelRepository;
 import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Director;
@@ -14,11 +15,13 @@ import com.fdmgroup.TarvinGillMovieList.model.Director;
 @Service
 public class DirectorService {
 	private DirectorRepository directorRepo;
+	private PersonnelRepository personnelRepo;
 
 	@Autowired
-	public DirectorService(DirectorRepository directorRepo) {
+	public DirectorService(DirectorRepository directorRepo, PersonnelRepository personnelRepo) {
 		super();
 		this.directorRepo = directorRepo;
+		this.personnelRepo = personnelRepo;
 	}
 
 	public List<Director> getAllDirectors() {
@@ -33,9 +36,15 @@ public class DirectorService {
 	public void addDirector(Director director) {
 		if (directorRepo.existsById(director.getDirId())) {
 			throw new NotFoundException("Director with ID: " + director.getDirId() + " exists");
-		} else {
-			this.directorRepo.save(director);
 		}
+		
+		if (!personnelRepo.existsById(director.getPersonnel().getPersonnelId())) {
+			throw new NotFoundException(
+					"Director with personnel ID: " + director.getPersonnel().getPersonnelId() + " does not exist");
+		}
+			
+		this.directorRepo.save(director);
+		
 	}
 
 	// cannot update actors as they only reference a personnelId at the moment

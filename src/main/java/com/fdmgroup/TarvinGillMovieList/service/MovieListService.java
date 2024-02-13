@@ -49,7 +49,7 @@ public class MovieListService {
 		mvList.setDateCreated(new Timestamp(System.currentTimeMillis()));
 		mvList.setDateModified(new Timestamp(System.currentTimeMillis()));
 		
-		this.mvRepo.saveAndFlush(mvList);
+		this.mvRepo.save(mvList);
 	}
 
 	public void update(MovieList mvList) {

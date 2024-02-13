@@ -6,10 +6,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,11 +19,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fdmgroup.TarvinGillMovieList.dal.ActorRepository;
+import com.fdmgroup.TarvinGillMovieList.dal.DirectorRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
+import com.fdmgroup.TarvinGillMovieList.dal.MovieRepository;
+import com.fdmgroup.TarvinGillMovieList.dal.PersonnelRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
+import com.fdmgroup.TarvinGillMovieList.model.Actor;
+import com.fdmgroup.TarvinGillMovieList.model.Director;
+import com.fdmgroup.TarvinGillMovieList.model.Movie;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
+import com.fdmgroup.TarvinGillMovieList.model.Personnel;
 import com.fdmgroup.TarvinGillMovieList.model.User;
+import com.fdmgroup.TarvinGillMovieList.service.ActorService;
+import com.fdmgroup.TarvinGillMovieList.service.DirectorService;
 import com.fdmgroup.TarvinGillMovieList.service.MovieListService;
+import com.fdmgroup.TarvinGillMovieList.service.MovieService;
+import com.fdmgroup.TarvinGillMovieList.service.PersonnelService;
 import com.fdmgroup.TarvinGillMovieList.service.UserService;
 
 @SpringBootTest
@@ -34,21 +49,69 @@ public class ServiceTests {
 	private PasswordEncoder passwordEncoder;
 	
 	@Mock
-	MovieListRepository mlRepo;
+	private MovieListRepository mlRepo;
 	
 	@Mock
-	UserRepository userRepo;
+	private UserRepository userRepo;
 	
-	@Autowired
-	MovieListService mlService;
+	@Mock
+	private MovieRepository movieRepo;
+	
+	@Mock
+	private PersonnelRepository personnelRepo;
+	
+	@Mock
+	private ActorRepository actorRepo;
+	
+	@Mock
+	private DirectorRepository directorRepo;
+	
 
-	@Autowired
-	UserService userService;
+	private MovieListService mlService;
+
+	private UserService userService;
+	
+	private MovieService movieService;
+
+	private PersonnelService personnelService;
+	
+	private ActorService actorService;
+	
+	private DirectorService directorService;
 
 	User user1;
 	User user2;
 
 	Optional<User> opUser1;
+	
+	Optional<Personnel> opPerson1;
+	Optional<Personnel> opPerson2;
+	Optional<Personnel> opPerson3;
+	
+	Optional<Actor> opActor1;
+	Optional<Actor> opActor2;
+	
+	Optional<Director> opDir1;
+	Optional<Director> opDir2;
+	
+	Movie movie1;
+
+	Movie movie2;
+	
+	Director dir1;
+	
+	Director dir2;
+	
+	Actor actor1;
+	
+	Actor actor2;
+	
+	Personnel person1;
+	
+	Personnel person2;
+	
+	Personnel person3;
+	
 	
 	
 	/**
@@ -61,6 +124,10 @@ public class ServiceTests {
 	public void setup() {
 		userService = new UserService(userRepository, passwordEncoder);
 		mlService = new MovieListService(mlRepo, userRepo);
+		movieService = new MovieService(movieRepo);
+		personnelService = new PersonnelService(personnelRepo);
+		actorService = new ActorService(actorRepo, personnelRepo);
+		directorService = new DirectorService(directorRepo, personnelRepo);
 		
 
 		user1 = new User("johndoe@gmail.com", "johndoe9812", "password1234");
@@ -71,6 +138,43 @@ public class ServiceTests {
 
 		opUser1 = Optional.of(new User("johndoe@gmail.com", "johndoe9812", "password1234"));
 		
+		movie1 = new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
+				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+				4, "Action",
+				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg");
+		
+		movie2 = new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
+				"While out hunting, Llewelyn finds the grisly aftermath of a drug deal. Though he knows better, he cannot resist the cash left behind and takes it. The hunter becomes the hunted when a merciless killer named Chigurh picks up his trail.",
+				5, "Thriller",
+				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg");
+		
+		opPerson1 = Optional.of(new Personnel("Jon", "Favraeu"));	
+		person1 = opPerson1.get();
+		person1.setPersonnelId(1);
+		
+		opPerson2 = Optional.of(new Personnel("Robert", "Downey", "Jr"));
+		person2 = opPerson2.get();
+		person2.setPersonnelId(2);
+		
+		opPerson3 = Optional.of(new Personnel("Ben", "Affleck")); // both director and actor
+		person3 = opPerson3.get();
+		person3.setPersonnelId(3);
+		
+		opActor1 = Optional.of(new Actor(person2));
+		actor1 = opActor1.get();
+		actor1.setActorId(1);
+		
+		opActor2 = Optional.of(new Actor(person3));
+		actor2 = opActor2.get();
+		actor2.setActorId(2);
+		
+		opDir1 = Optional.of(new Director(person1));
+		dir1 = opDir1.get();
+		dir1.setDirId(1);
+		
+		opDir2 = Optional.of(new Director(person3));
+		dir2 = opDir2.get();
+		dir2.setDirId(2);
 	}
 
 	@Test
@@ -169,7 +273,7 @@ public class ServiceTests {
 		Throwable exception = assertThrows(RuntimeException.class, () -> {
 			userService.save(user1);
 		});
-		assertEquals("User with email " + user1.getEmail() + " already exists, please login", exception.getMessage());
+		assertEquals("User with email " + user1.getEmail() + " already exists, please login with your associated username", exception.getMessage());
 		verify(userRepository, times(0)).save(user1); // check that user repository method was not called
 	}
 
@@ -181,7 +285,7 @@ public class ServiceTests {
 		Throwable exception = assertThrows(RuntimeException.class, () -> {
 			userService.save(user1);
 		});
-		assertEquals("This username has been taken, please type in another username", exception.getMessage());
+		assertEquals( user1.getUsername() + " has been taken, please type in another username", exception.getMessage());
 		verify(userRepository, times(0)).save(user1); // check that user repository method was not called
 	}
 
@@ -259,7 +363,7 @@ public class ServiceTests {
 	 */
 	
 	@Test
-	public void find_all_users() {
+	public void find_all_movielists() {
 		List<MovieList> mvLists = new ArrayList<>();
 		mvLists.add(new MovieList("Best movies of all time"));
 		mvLists.add(new MovieList("My favourite films of the 2010s")); 
@@ -289,12 +393,15 @@ public class ServiceTests {
 	@Test
 	public void add_new_movie_list() {
 		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+		when(userRepo.findByUsername(user1.getUsername())).thenReturn(opUser1);
+		mvList1.setUser(user1);
 		mlService.createList(mvList1);
 		verify(mlRepo, times(1)).save(mvList1);
 	}
 	@Test
 	public void add_new_movie_list_throws_exception() {
 		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+		
 		mvList1.setListId(1);
 		
 		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
@@ -356,4 +463,225 @@ public class ServiceTests {
 		assertEquals("Movie list with ID: " + mvList1.getListId() + " not found",exception.getMessage());
 	}
 	
+	/**
+	 * **************************************
+	 * Movie Service Tests
+	 * **************************************
+	 */
+	
+//	@Test
+//	public void get_all_movies_test() {
+//		List<Movie> movies = new ArrayList<>();
+//		movies.add(new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
+//				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+//				4, "Action",
+//				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg"));
+//		movies.add(new Movie("No Country For Old Men", Date.valueOf("2007-11-09"), 122,
+//				"While out hunting, Llewelyn finds the grisly aftermath of a drug deal. Though he knows better, he cannot resist the cash left behind and takes it. The hunter becomes the hunted when a merciless killer named Chigurh picks up his trail.",
+//				5, "Thriller",
+//				"https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p170313_p_v13_ad.jpg"));
+//		
+//		System.out.println(movies);
+//
+//		when(movieRepo.findAll()).thenReturn(movies);
+//
+//		List<Movie> foundMovies = new ArrayList<>();
+//		foundMovies = movieService.getAllMovies();
+//		System.out.println(foundMovies);
+//
+//		assertEquals(foundMovies, movies);
+//		verify(movieRepo, times(1)).findAll();
+//	}
+//	
+//	@Test
+//	public void add_new_movie() {
+//		Movie movie1 = new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
+//				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
+//				4, "Action",
+//				"https://upload.wikimedia.org/wikipedia/en/0/02/Iron_Man_%282008_film%29_poster.jpg");
+//		movieService.addMovie(movie1);
+//		verify(movieRepo, times(1)).save(movie1);
+//	}
+	
+	/**	 * **************************************
+	 * Personnel Service Tests
+	 * **************************************
+	 */
+	
+	@Test
+	public void get_all_personnel() {
+		List<Personnel> allPersonnel = new ArrayList<>();
+		allPersonnel.add(person1);
+		allPersonnel.add(person2);
+		
+		when(personnelRepo.findAll()).thenReturn(allPersonnel);
+		List<Personnel> foundPersonnel = personnelService.getAllPersonnel();
+		
+		assertEquals(foundPersonnel, allPersonnel);
+	}
+	
+	@Test
+	public void get_personnel_by_id() {
+		int id = person1.getPersonnelId();
+		
+		when(personnelRepo.existsById(id)).thenReturn(true);
+		when(personnelRepo.findById(id)).thenReturn(opPerson1);
+		
+		Personnel foundPerson1 = personnelService.getPersonnelById(id).get();
+		
+		assertEquals(person1, foundPerson1);
+	}
+	
+	@Test
+	public void add_new_personnel() {
+		personnelService.addPersonnel(person1);
+		personnelService.addPersonnel(person2);
+		
+		verify(personnelRepo, times(1)).save(person1);
+		verify(personnelRepo, times(1)).save(person2);
+	}
+	
+	@Test
+	public void delete_personnel_by_id() {
+		int id = person1.getPersonnelId();
+		
+		when(personnelRepo.existsById(id)).thenReturn(true);
+		personnelService.deletePersonnelById(id);
+		
+		verify(personnelRepo,times(1)).deleteById(id);
+
+	}
+	
+	@Test
+	public void update_personnel() {
+		int id = person1.getPersonnelId();
+		
+		when(personnelRepo.existsById(id)).thenReturn(true);
+		
+		personnelService.updatePersonnel(person1);
+		
+		verify(personnelRepo,times(1)).save(person1);
+		
+	}
+	
+	/**	 * **************************************
+	 * Actor Service Tests
+	 * **************************************
+	 */
+	
+	@Test
+	public void get_all_actors() {
+		List<Actor> allActors = new ArrayList<>();
+		allActors.add(actor1);
+		allActors.add(actor2);
+		
+		when(actorRepo.findAll()).thenReturn(allActors);
+		List<Actor> foundActors = actorService.getAllActors();
+		
+		assertEquals(foundActors, allActors);
+	}
+	
+	@Test
+	public void get_actor_by_id() {
+		int id = actor1.getActorId();
+		
+		
+		when(actorRepo.existsById(id)).thenReturn(true);
+		when(actorRepo.findById(id)).thenReturn(opActor1);
+		
+		Actor foundActor1 = actorService.getActorById(id).get();
+		
+		assertEquals(actor1, foundActor1);
+	}
+	
+	@Test
+	public void add_new_actor() {
+		int actorId = actor1.getActorId();
+		int personnelId = actor1.getPersonnel().getPersonnelId();
+		
+		when(actorRepo.existsById(actorId)).thenReturn(false);
+		when(personnelRepo.existsById(personnelId)).thenReturn(true);
+		actorService.addActor(actor1);
+		verify(actorRepo, times(1)).save(actor1);
+
+	}
+	
+	@Test
+	public void update_actor_throws_forbidden_exception() {
+		Throwable exception1 = assertThrows(ForbiddenException.class, () -> {
+			actorService.updateActor();
+		});
+		
+		assertEquals("Cannot update actors", exception1.getMessage());
+	}
+	
+	@Test
+	public void delete_actor_by_id() {
+		int id = actor1.getActorId();
+		
+		when(actorRepo.existsById(id)).thenReturn(true);
+		
+		actorService.deleteByActorId(id);
+		verify(actorRepo,times(1)).deleteByActorId(id);
+	}
+	
+	/**	 * **************************************
+	 * Director Service Tests
+	 * **************************************
+	 */
+	
+	@Test
+	public void get_all_directors() {
+		List<Director> directors = new ArrayList<>();
+		directors.add(dir1);
+		directors.add(dir2);
+		
+		when(directorRepo.findAll()).thenReturn(directors);
+		
+		List<Director> foundDirectors = new ArrayList<>();
+		foundDirectors = directorService.getAllDirectors();
+		assertEquals(foundDirectors, directors);
+		
+	}
+	
+	@Test
+	public void get_director_by_id () {
+		int id = dir1.getDirId();
+		when(directorRepo.findById(id)).thenReturn(opDir1);
+		when(directorRepo.existsById(id)).thenReturn(true);
+		Director foundDir1 = directorService.getDirectorById(id).get();
+		assertEquals(dir1, foundDir1);
+	}
+	
+	@Test
+	public void add_new_director() {
+		int dirId = dir1.getDirId();
+		int personnelId = dir1.getPersonnel().getPersonnelId();
+		
+		when(actorRepo.existsById(dirId)).thenReturn(false);
+		when(personnelRepo.existsById(personnelId)).thenReturn(true);
+		directorService.addDirector(dir1);
+		verify(directorRepo, times(1)).save(dir1);
+
+	}
+	
+	
+	@Test
+	public void update_directors() {
+		Throwable exception1 = assertThrows(ForbiddenException.class, () -> {
+			directorService.updateDirector();
+		});
+		
+		assertEquals("Cannot update directors", exception1.getMessage());
+	}
+	
+	@Test
+	public void delete_director_by_id () {
+		int dirId = dir1.getDirId();
+		when(directorRepo.existsById(dirId)).thenReturn(true);
+		
+		directorService.deleteByDirId(dirId);
+		verify(directorRepo, times(1)).deleteByDirId(dirId);
+	}
+
 }
