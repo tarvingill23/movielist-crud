@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
+import com.fdmgroup.TarvinGillMovieList.model.Movie;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
 import com.fdmgroup.TarvinGillMovieList.model.User;
 
@@ -32,6 +33,10 @@ public class MovieListService {
 	public Optional<MovieList> findById(int listId) {
 		checkMovieListExists(listId);
 		return this.mlRepo.findById(listId);
+	}
+		
+	public List<MovieList> getPartialMatches(String q) {
+		return mlRepo.findPartialMatch(q);	
 	}
 	
 	public void createList(MovieList mvList) {

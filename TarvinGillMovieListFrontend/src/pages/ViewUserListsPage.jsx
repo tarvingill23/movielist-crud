@@ -5,6 +5,7 @@ const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
   const style = {
     marginTop: "100px",
   };
+
   return (
     <Grid style={style} container>
       {bearerProp && userMovielistsProp.length > 1 && (
