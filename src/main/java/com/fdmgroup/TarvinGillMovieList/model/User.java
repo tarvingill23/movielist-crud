@@ -24,10 +24,8 @@ public class User {
 	private String email;
 	@Column(nullable = false)
 	private String username;
-	@Column(nullable = false)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
-	
 	@OneToMany(mappedBy="user", cascade= CascadeType.ALL)
 	private List<MovieList> movielists;
 	

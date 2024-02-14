@@ -3,11 +3,13 @@ package com.fdmgroup.TarvinGillMovieList.service;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.BadRequestException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.ConflictException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
@@ -36,7 +38,7 @@ public class UserService {
 	}
 
 	
-	public void save(User newUser) {
+	public void save(User newUser) throws BadRequestException {
 		if (userRepo.existsById(newUser.getUserId())) {
 			throw new ConflictException("User with ID: " + newUser.getUserId() + " exists");
 		}
@@ -46,16 +48,18 @@ public class UserService {
 		if (userRepo.existsByUsername(newUser.getUsername())) {
 			throw new ConflictException( newUser.getUsername() + " has been taken, please type in another username");
 		}
+		if(newUser.getPassword() == null) {
+			throw new BadRequestException("Password cannot be null");
+		}
 		register(newUser);
 	}
 
 	public void update(User newUser) {
 		checkUserExists(newUser.getUserId());
-		Optional<User> user = findById(newUser.getUserId());
-		User foundUser = user.get();
+		User foundUser= findById(newUser.getUserId()).get();
 		updateEmail(newUser, foundUser);
 		updateUsername(newUser, foundUser);
-
+		
 		this.userRepo.save(newUser);
 	}
 

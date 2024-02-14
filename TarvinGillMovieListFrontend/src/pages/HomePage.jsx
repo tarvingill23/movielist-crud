@@ -17,19 +17,14 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
 
   useEffect(() => {
     const api = "api/movielists";
-    axios
-      .get(api)
-      .then((response) => {
-        setMovielists(response.data);
-        setUserMovielists(
-          response.data.filter(
-            (movielist) => movielist.user.username === usernameProp
-          )
-        );
-      })
-      .catch((error) => {
-        console.log("Unable to load data", error);
-      });
+    axios.get(api).then((response) => {
+      setMovielists(response.data);
+      setUserMovielists(
+        response.data.filter(
+          (movielist) => movielist.user.username === usernameProp
+        )
+      );
+    });
   }, [setUserMovielists, usernameProp, userMovielistsProp]);
   return (
     <Grid style={gridStyle} container>

@@ -11,11 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -79,10 +77,9 @@ public class ServiceTests {
 	
 	private DirectorService directorService;
 
-	User user1;
-	User user2;
 
 	Optional<User> opUser1;
+	Optional<User> opUser2;
 	
 	Optional<Movie> opMovie1;
 	Optional<Movie> opMovie2;
@@ -115,6 +112,9 @@ public class ServiceTests {
 	
 	Personnel person3;
 	
+	User user1;
+	User user2;
+	
 	
 	@BeforeEach
 	public void setup() {
@@ -125,14 +125,13 @@ public class ServiceTests {
 		actorService = new ActorService(actorRepo, personnelRepo);
 		directorService = new DirectorService(directorRepo, personnelRepo);
 		
-
-		user1 = new User("johndoe@gmail.com", "johndoe9812", "password1234");
-		user1.setUserId(1);
-
-		user2 = new User("janedoe@gmail.com", "janedoe9823", "password4231");
-		user2.setUserId(2);
-
 		opUser1 = Optional.of(new User("johndoe@gmail.com", "johndoe9812", "password1234"));
+		user1 = opUser1.get();
+		user1.setUserId(1);
+		
+		opUser2 = Optional.of(new User("janedoe@gmail.com", "janedoe9823", "password4231"));
+		user2 = opUser2.get();
+		user2.setUserId(2);
 		
 		opMovie1 = Optional.of(new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
 				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
@@ -199,8 +198,8 @@ public class ServiceTests {
 	@Test
 	public void findAll_users_returns_2_users() {
 		List<User> users = new ArrayList<User>();
-		users.add(new User("tarvingill23@gmail,com", "tarvingill23", "password123"));
-		users.add(new User("juliexiong17@gmail.com", "juliexiong17", "password12"));
+		users.add(user1);
+		users.add(user2);
 
 		when(userRepository.findAll()).thenReturn(users);
 
@@ -224,11 +223,9 @@ public class ServiceTests {
 		// // returns optional user
 		when(userRepository.findById(userId)).thenReturn(opUser1);
 
-		Optional<User> foundOpUser = userService.findById(userId);
-		User foundUser = foundOpUser.get();
+		User foundUser = userService.findById(userId).get();
 		foundUser.setUserId(userId);
 
-		assertEquals(foundOpUser, opUser1); // check optional users match
 		assertEquals(foundUser.getUserId(), user1.getUserId());
 
 		verify(userRepository, times(1)).findById(userId);
@@ -299,16 +296,17 @@ public class ServiceTests {
 	 * UPDATE USERS
 	 */
 
-//	@Test
-//	public void update_user() {
-//		
-//		User updatedUser1 = new User("johndoe@gmail.com", "updatedUsername", "password1234");
-//		updatedUser1.setUserId(1);
-//		when(userRepository.existsById(updatedUser1.getUserId())).thenReturn(true);
-//		userService.update(updatedUser1);
-//
-//		verify(userRepository, times(1)).save(updatedUser1);
-//	}
+	@Test
+	public void update_user() {
+		int id = user1.getUserId();
+
+		when(userRepository.existsById(id)).thenReturn(true);
+		when(userRepository.findById(id)).thenReturn(opUser1);
+		
+		
+		userService.update(user1);
+		verify(userRepository, times(1)).save(user1);
+	}
 
 	@Test
 	public void update_user_throws_exception_if_id_does_not_exist() {
@@ -498,6 +496,26 @@ public class ServiceTests {
 		Movie foundMovie = movieService.getMovieById(id).get();
 		assertEquals(movie1, foundMovie);
 	}
+	
+	@Test
+	public void find_partial_matches_for_movies() {
+		Movie movie2 = new Movie("Iron Man 2", Date.valueOf("2010-05-07"), 125,
+				"With the world now aware of his identity as Iron Man, Tony Stark must contend with both his declining health and a vengeful mad man with ties to his father's legacy.",
+				3, "Action",
+				"https://upload.wikimedia.org/wikipedia/en/e/ed/Iron_Man_2_poster.jpg");
+		List<Movie> movies = new ArrayList<>();
+		movies.add(movie1);
+		movies.add(movie2);
+		
+		String query = "Iron";
+		
+		when(movieRepo.findPartialMatch(query)).thenReturn(movies);
+		
+		List<Movie> foundMovies = movieService.getPartialMatches(query);
+		assertEquals(movies, foundMovies);
+		verify(movieRepo, times(1)).findPartialMatch(query);
+	}
+	
 	@Test
 	public void add_new_movie() {
 		int id = movie1.getMovieId();

@@ -55,7 +55,7 @@ const SignUpPage = () => {
     if (!validator.isAlphanumeric(value)) {
       setUsernameError("Username can only contain letters and numbers");
     } else if (value.length < 3 || value.length > 16) {
-      setUsernameError("Username must be between 3-9 characters");
+      setUsernameError("Username must be between 3-16 characters");
     } else setUsernameError("");
   };
 

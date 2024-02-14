@@ -27,6 +27,12 @@ public class RestExceptionHandler {
 		return new ApiErrorResponse(e.getMessage());
 	}
 	
+	@ExceptionHandler(BadRequestException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiErrorResponse handle(BadRequestException e) {
+		return new ApiErrorResponse(e.getMessage());
+	}
+	
 
 }
 

@@ -66,9 +66,6 @@ const MovieListComponent = ({ usernameProp }) => {
       })
       .then(() => {
         setLoading(false);
-      })
-      .catch((error) => {
-        console.log("Unable to load data", error);
       });
   }, [listId]);
 
@@ -82,15 +79,10 @@ const MovieListComponent = ({ usernameProp }) => {
   const deleteList = () => {
     const apiDelete = `/api/movielists/${listId}`;
     setButtonLoading(true);
-    axios
-      .delete(apiDelete)
-      .then(() => {
-        setButtonLoading(false);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("Unable to delete list", error);
-      });
+    axios.delete(apiDelete).then(() => {
+      setButtonLoading(false);
+      navigate("/");
+    });
   };
 
   // Update a movielist
@@ -103,17 +95,12 @@ const MovieListComponent = ({ usernameProp }) => {
       user,
     };
     setButtonLoading(true);
-    axios
-      .put(apiUpdate, updatedMovielist)
-      .then(() => {
-        setTimeout(() => {
-          setButtonLoading(false);
-        }, 1000);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("Unable to update list", error);
-      });
+    axios.put(apiUpdate, updatedMovielist).then(() => {
+      setTimeout(() => {
+        setButtonLoading(false);
+      }, 1000);
+      navigate("/");
+    });
   };
 
   // Remove movie based on movieData object passed by child to parent
@@ -152,14 +139,9 @@ const MovieListComponent = ({ usernameProp }) => {
   // Load all movies
   useEffect(() => {
     const apiGetAll = "/api/movies";
-    axios
-      .get(apiGetAll)
-      .then((response) => {
-        setMovieOptions(response.data);
-      })
-      .catch((error) => {
-        console.log("Unable to load data", error);
-      });
+    axios.get(apiGetAll).then((response) => {
+      setMovieOptions(response.data);
+    });
   }, [selectedIds]);
 
   useEffect(() => {

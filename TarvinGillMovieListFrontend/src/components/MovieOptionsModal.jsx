@@ -48,7 +48,6 @@ const MovieOptionsModal = ({
   const searchForMovies = () => {
     const apiGetPartialMatch = `/api/movies/search?q=${searchValue}`;
     axios.get(apiGetPartialMatch).then((response) => {
-      console.log("ran");
       setRetrievedMovies(response.data);
     });
   };
@@ -113,7 +112,6 @@ const MovieOptionsModal = ({
             <Button onClick={searchForMovies}>Search</Button>
           </Toolbar>
           <Grid sx={dialogStyle} direction={"row"} container spacing={6}>
-            {console.log(retrievedMovies, "Retrieved Movies")}
             {retrievedMovies.length > 0 &&
               retrievedMovies.map((movie) => {
                 return (
