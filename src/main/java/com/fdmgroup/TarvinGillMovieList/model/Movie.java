@@ -35,7 +35,7 @@ public class Movie {
 
 	// allows propogation of operations from parent to child
 	@ManyToMany(mappedBy="movies", cascade= CascadeType.ALL)
-	List<MovieList> movieLists;
+	private List<MovieList> movieLists;
 	
 	@ManyToMany
 	@JoinTable(name = "Movie_Director", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "director_id"))

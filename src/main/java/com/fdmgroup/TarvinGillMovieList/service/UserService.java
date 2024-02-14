@@ -15,35 +15,35 @@ import com.fdmgroup.TarvinGillMovieList.model.User;
 
 @Service
 public class UserService {
-	private UserRepository userRepository;
+	private UserRepository userRepo;
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepo, PasswordEncoder passwordEncoder) {
 		super();
-		this.userRepository = userRepository;
+		this.userRepo = userRepo;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	public List<User> findAll() {
-		return this.userRepository.findAll();
+		return this.userRepo.findAll();
 	}
 
 
 	public Optional<User> findById(int userId) {
 		checkUserExists(userId);
-		return this.userRepository.findById(userId);
+		return this.userRepo.findById(userId);
 	}
 
 	
 	public void save(User newUser) {
-		if (userRepository.existsById(newUser.getUserId())) {
+		if (userRepo.existsById(newUser.getUserId())) {
 			throw new ConflictException("User with ID: " + newUser.getUserId() + " exists");
 		}
-		if (userRepository.existsByEmail(newUser.getEmail())) {
+		if (userRepo.existsByEmail(newUser.getEmail())) {
 			throw new ConflictException("User with email " + newUser.getEmail() + " already exists, please login with your associated username");
 		}
-		if (userRepository.existsByUsername(newUser.getUsername())) {
+		if (userRepo.existsByUsername(newUser.getUsername())) {
 			throw new ConflictException( newUser.getUsername() + " has been taken, please type in another username");
 		}
 		register(newUser);
@@ -56,12 +56,12 @@ public class UserService {
 		updateEmail(newUser, foundUser);
 		updateUsername(newUser, foundUser);
 
-		this.userRepository.save(newUser);
+		this.userRepo.save(newUser);
 	}
 
 	public void deleteById(int userId) {
 		checkUserExists(userId);
-		this.userRepository.deleteById(userId);
+		this.userRepo.deleteById(userId);
 	}
 
 	public void updateEmail(User newUser, User foundUser) {
@@ -71,7 +71,7 @@ public class UserService {
 	}
 
 	public void updateUsername(User newUser, User foundUser) {
-		if (userRepository.existsByUsername(newUser.getUsername())) {
+		if (userRepo.existsByUsername(newUser.getUsername())) {
 			if (!newUser.getUsername().equals(foundUser.getUsername())) {
 				throw new ConflictException("This username has been taken, please type in another username");
 			}
@@ -79,7 +79,7 @@ public class UserService {
 	}
 
 	public void checkUserExists(int userId) {
-		if (userRepository.existsById(userId) == false) {
+		if (userRepo.existsById(userId) == false) {
 			throw new NotFoundException("User with ID: " + userId + " not found");
 		}
 	}
@@ -88,6 +88,6 @@ public class UserService {
         //Hash(encode) the password
 	        String hashedPassword = passwordEncoder.encode(user.getPassword());
 	        user.setPassword(hashedPassword);
-	        this.userRepository.save(user);
+	        this.userRepo.save(user);
     }
 }

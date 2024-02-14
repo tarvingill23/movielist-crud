@@ -39,17 +39,17 @@ private PersonnelService personnelService;
 	}
 	
 	@PostMapping("personnel")
-	public void addUser(@RequestBody Personnel person) {
+	public void addPersonnel(@RequestBody Personnel person) {
 		personnelService.addPersonnel(person);
 	}
 	
 	@PutMapping("personnel")
-	public void updateUser(@RequestBody Personnel person) {
+	public void updatePersonnel(@RequestBody Personnel person) {
 		personnelService.updatePersonnel(person);
 	}
 
 	@DeleteMapping ("personnel/{personnelId}") 
-	public void deleteUser(@PathVariable int personnelId) {
+	public void deletePersonnel(@PathVariable int personnelId) {
 		personnelService.deletePersonnelById(personnelId);
 	}
 }

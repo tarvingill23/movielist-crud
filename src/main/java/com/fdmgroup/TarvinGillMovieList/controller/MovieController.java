@@ -52,7 +52,7 @@ public class MovieController {
 	}
 	
 	@DeleteMapping ("movies/{movieId}")
-	public void updateMovie( @PathVariable int movieId) {
+	public void deleteMovie( @PathVariable int movieId) {
 		this.movieService.deleteMovie(movieId);
 	}
 	

@@ -15,27 +15,27 @@ import com.fdmgroup.TarvinGillMovieList.model.User;
 
 @Service
 public class MovieListService {
-	private MovieListRepository mvRepo;
+	private MovieListRepository mlRepo;
 	private UserRepository userRepo;
 
 	@Autowired
-	public MovieListService(MovieListRepository mvRepo, UserRepository userRepo) {
+	public MovieListService(MovieListRepository mlRepo, UserRepository userRepo) {
 		super();
-		this.mvRepo = mvRepo;
+		this.mlRepo = mlRepo;
 		this.userRepo = userRepo;
 	}
 
 	public List<MovieList> findAll() {
-		return this.mvRepo.findAll();
+		return this.mlRepo.findAll();
 	}
 
 	public Optional<MovieList> findById(int listId) {
 		checkMovieListExists(listId);
-		return this.mvRepo.findById(listId);
+		return this.mlRepo.findById(listId);
 	}
 	
 	public void createList(MovieList mvList) {
-		if (mvRepo.existsById(mvList.getListId())) {
+		if (mlRepo.existsById(mvList.getListId())) {
 			throw new NotFoundException("Movie list with ID: " + mvList.getListId()
 					+ " exists");
 		}
@@ -48,23 +48,23 @@ public class MovieListService {
 		mvList.setDateCreated(new Timestamp(System.currentTimeMillis()));
 		mvList.setDateModified(new Timestamp(System.currentTimeMillis()));
 		
-		this.mvRepo.save(mvList);
+		this.mlRepo.save(mvList);
 	}
 
 	public void update(MovieList mvList) {
 		checkMovieListExists(mvList.getListId());
 		mvList.setDateModified(new Timestamp(System.currentTimeMillis()));
-		this.mvRepo.save(mvList);
+		this.mlRepo.save(mvList);
 	}
 
 	public void deleteById(int listId) {
 		checkMovieListExists(listId);
-		this.mvRepo.deleteById(listId);
+		this.mlRepo.deleteById(listId);
 
 	}
 
 	public void checkMovieListExists(int listId) {
-		if (!mvRepo.existsById(listId)) {
+		if (!mlRepo.existsById(listId)) {
 			throw new NotFoundException("Movie list with ID: " + listId + " not found");
 		}
 	}

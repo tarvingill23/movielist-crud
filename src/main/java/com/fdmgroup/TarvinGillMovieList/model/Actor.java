@@ -23,7 +23,7 @@ public class Actor {
 	private Personnel personnel;
 	
 	@ManyToMany(mappedBy="actors", cascade= CascadeType.ALL)
-	List <Movie> movies;
+	private List <Movie> movies;
 	/**
 	 * CONSTRUCTORS
 	 */
