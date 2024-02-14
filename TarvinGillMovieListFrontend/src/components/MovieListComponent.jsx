@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditOutlined, SaveOutlined } from "@mui/icons-material";
+import {
+  ArrowDownwardOutlined,
+  ArrowUpwardOutlined,
+  EditOutlined,
+  SaveOutlined,
+} from "@mui/icons-material";
 import {
   Button,
   ButtonGroup,
@@ -13,6 +18,8 @@ import {
   TextField,
   Typography,
   InputLabel,
+  Stack,
+  Divider,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -28,6 +35,7 @@ const MovieListComponent = ({ usernameProp }) => {
   const [title, setTitle] = useState("");
   const [user, setUser] = useState({});
   const [selectedIds, setSelectedIds] = useState([]);
+  const [arrowUp, setArrowUp] = useState(true);
 
   const [openConfirmDelete, setConfirmDelete] = useState(false);
   const handleOpen = (param) => param(true);
@@ -77,7 +85,7 @@ const MovieListComponent = ({ usernameProp }) => {
 
   useEffect(() => {
     if (movies) {
-      setSelectedIds(movies.map((movie) => movie.movieId));
+      setSelectedIds([...movies].map((movie) => movie.movieId));
     }
   }, [movies]);
 
@@ -110,7 +118,7 @@ const MovieListComponent = ({ usernameProp }) => {
   };
 
   // Remove movie based on movieData object passed by child to parent
-  const removeMovie = (childMovie) => {
+  const removeMovieFromList = (childMovie) => {
     let updatedMovies = movies.filter(
       (movie) => movie.movieId != childMovie.movieId
     );
@@ -129,15 +137,10 @@ const MovieListComponent = ({ usernameProp }) => {
 
   const changeRank = (newRank, initialRank, movie) => {
     let updatedMovies = movies;
-
     updatedMovies.splice(initialRank - 1, 1);
-
     let moviesBefore = updatedMovies.slice(0, newRank - 1);
-
     let moviesAfter = updatedMovies.slice(newRank - 1, updatedMovies.length);
-
     moviesAfter.unshift(movie);
-
     updatedMovies = [...moviesBefore, ...moviesAfter];
     setMovies(updatedMovies);
   };
@@ -160,6 +163,11 @@ const MovieListComponent = ({ usernameProp }) => {
   // toggle editing mode
   const toggleEditMode = () => {
     setEditMode((editingMode) => !editingMode);
+  };
+  // toggle arrow up or down
+  const sortDirection = () => {
+    setMovies((movies) => [...movies].reverse()); // reverses the array to handle ascending and descending
+    setArrowUp((arrowUp) => !arrowUp);
   };
 
   const parseDate = (date) => {
@@ -200,6 +208,7 @@ const MovieListComponent = ({ usernameProp }) => {
         })
       );
     }
+    setArrowUp(true); // put arrow up when any sort is chosen as default
   }, [sort, movielist.movies]);
 
   const handleSort = (event) => {
@@ -229,32 +238,60 @@ const MovieListComponent = ({ usernameProp }) => {
   }
   return (
     <div key={movielist.listId} className="list-container">
-      <Grid justifyContent={"space-between"} container>
+      <Grid justifyContent={"end"} alignItems={"center"} container>
         {showEditIcon && (
-          <Grid item>
+          <Grid xs={2} item>
             <IconButton sx={{ margin: "0 20px" }} onClick={toggleEditMode}>
               <EditOutlined />
             </IconButton>
           </Grid>
         )}
-        {!editingMode && (
-          <Grid item sx={{ minWidth: 200, margin: "0 20px" }}>
-            <FormControl fullWidth>
-              <InputLabel id="sort-label">Sort</InputLabel>
-              <Select
-                id="sort-label"
-                onChange={handleSort}
-                label="Sort"
-                value={sort}
-              >
-                {menuOptions.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+      </Grid>
+      {!editingMode && (
+        <>
+          <h1>{title}</h1>
+          <Stack
+            direction={"row"}
+            spacing={2}
+            divider={<Divider orientation="vertical" flexItem />}
+          >
+            <p>{`created by: ${movielist.user.username}`}</p>
+            <p>{`created on: ${parseDate(movielist.dateCreated)}`}</p>
+            <p>{`last modified on: ${parseDate(movielist.dateModified)}`}</p>
+          </Stack>
+        </>
+      )}
+      <Grid
+        sx={{ margin: "50px 10px 10px 0px" }}
+        alignItems={"center"}
+        justifyContent={"center"}
+        container
+      >
+        {!editingMode && movielist.movies.length > 0 && (
+          <>
+            <Grid xs={2} item>
+              <FormControl fullWidth>
+                <InputLabel id="sort-label">Sort</InputLabel>
+                <Select
+                  id="sort-label"
+                  onChange={handleSort}
+                  label="Sort"
+                  value={sort}
+                >
+                  {menuOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid xs="auto" item>
+              <IconButton sx={{ justifySelf: "end" }} onClick={sortDirection}>
+                {arrowUp ? <ArrowUpwardOutlined /> : <ArrowDownwardOutlined />}
+              </IconButton>
+            </Grid>
+          </>
         )}
       </Grid>
       {editingMode && (
@@ -311,23 +348,6 @@ const MovieListComponent = ({ usernameProp }) => {
           </Grid>
         </Grid>
       )}
-
-      {!editingMode && (
-        <Grid direction={"column"} container>
-          <Grid>
-            <h1>{title}</h1>
-          </Grid>
-          <Grid>
-            <p>{`created by: ${movielist.user.username}`}</p>
-          </Grid>
-          <Grid>
-            <p>{`created on: ${parseDate(movielist.dateCreated)}`}</p>
-          </Grid>
-          <Grid>
-            <p>{`last modified on: ${parseDate(movielist.dateModified)}`}</p>
-          </Grid>
-        </Grid>
-      )}
       {editingMode && (
         <MovieOptionsModal
           openDialogProp={[openDialog, setOpenDialog]}
@@ -344,7 +364,7 @@ const MovieListComponent = ({ usernameProp }) => {
 
       <div>
         <Movie
-          removeMovie={removeMovie}
+          removeMovie={removeMovieFromList}
           editMode={editingMode}
           movies={movies}
           parseDate={parseDate}

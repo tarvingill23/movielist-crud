@@ -56,7 +56,6 @@ public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		System.out.println(new BCryptPasswordEncoder().encode("password"));
 		return new BCryptPasswordEncoder();
 	}
 
@@ -64,14 +63,14 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(
-						authz -> authz.requestMatchers("/adminonly").hasAuthority("SCOPE_ADMIN").anyRequest().permitAll())
+						authz -> authz.requestMatchers("/adminonly").hasAuthority("SCOPE_ADMIN").requestMatchers("/movielists-post").authenticated().anyRequest().permitAll())
 //        	.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)  //The old syntax
 				.oauth2ResourceServer(server -> server.jwt(Customizer.withDefaults()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.httpBasic(Customizer.withDefaults());
 		return http.build();
 	}
-
+	
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		final CorsConfiguration configuration = new CorsConfiguration();

@@ -6,8 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
   const [openCreateList, setOpenCreateList] = createListProp;
-  const handleOpen = (param) => param(true);
-  const handleClose = (param) => param(false);
+  const handleOpen = () => {
+    if (bearerProp) {
+      setOpenCreateList(true);
+    } else {
+      navigate("/signup");
+    }
+  };
+  const handleClose = () => setOpenCreateList(false);
   const [title, setTitle] = useState("");
   let navigate = useNavigate();
 
@@ -25,23 +31,21 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
       },
     };
     axios.post(apiCreate, movielist, requestOptions).then(() => {
-      navigate("/mylists", { state: { key: false } });
-      handleClose(setOpenCreateList);
+      navigate("/mylists  ", { state: { key: false } });
+      handleClose();
     });
   };
 
   const style = {
     display: "flex",
-    marginTop: "200px",
+    padding: "100px",
     backgroundColor: "black",
+    opacity: "0.95",
     zIndex: 9999,
   };
   return (
     <>
-      <Button
-        onClick={() => handleOpen(setOpenCreateList)}
-        sx={{ margin: "6px" }}
-      >
+      <Button onClick={handleOpen} sx={{ margin: "6px" }}>
         Create new list
       </Button>
       <Modal sx={style} open={openCreateList}>
@@ -58,9 +62,7 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
             <Button onClick={createList}>Create List</Button>
           </Grid>
           <Grid xs={6} item>
-            <Button onClick={() => handleClose(setOpenCreateList)}>
-              Cancel
-            </Button>
+            <Button onClick={() => handleClose()}>Cancel</Button>
           </Grid>
         </Grid>
       </Modal>

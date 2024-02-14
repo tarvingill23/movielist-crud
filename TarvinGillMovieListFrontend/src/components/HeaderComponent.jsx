@@ -35,7 +35,6 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
     height: "100px",
     width: "100%",
     position: "absolute",
-    padding: "0 20px 0 20px",
   };
 
   const listStyle = {
@@ -68,30 +67,32 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
   );
   return (
     <div style={headerStyle}>
-      <Grid alignItems="center" justifyContent="space-between" container>
-        <Grid item>
+      <Grid columns={18} alignItems="center" container>
+        <Grid xs={2} item>
           <IconButton component={Link} to={"/"}>
             <HomeOutlined />
           </IconButton>
         </Grid>
-        <Grid item>
+        <Grid xs={12} item>
           <Typography variant="h4">Movie List Maker</Typography>
         </Grid>
-        {bearerProp && (
-          <Grid item>
-            <CreateListModal
-              bearerProp={bearerProp}
-              usernameProp={usernameProp}
-              createListProp={[openCreateList, setOpenCreateList]}
-            />
-            <IconButton onClick={toggleDrawer}>
-              <AccountCircle />
-            </IconButton>
-            <Drawer anchor="right" open={isMenuOpen} onClose={toggleDrawer}>
-              {drawerList()}
-            </Drawer>
-          </Grid>
-        )}
+        <Grid xs="auto" item>
+          <CreateListModal
+            bearerProp={bearerProp}
+            usernameProp={usernameProp}
+            createListProp={[openCreateList, setOpenCreateList]}
+          />
+          {bearerProp && (
+            <>
+              <IconButton onClick={toggleDrawer}>
+                <AccountCircle />
+              </IconButton>
+              <Drawer anchor="right" open={isMenuOpen} onClose={toggleDrawer}>
+                {drawerList()}
+              </Drawer>
+            </>
+          )}
+        </Grid>
         {!bearerProp && (
           <Grid item>
             <Link style={{ margin: "8px" }} to={"/signup"}>

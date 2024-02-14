@@ -44,22 +44,23 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
               badgeContent={"Recently updated"}
               color="secondary"
             >
-              <Card variant="outlined" style={cardStyle}>
-                <Link
-                  to={`http://localhost:5173/movielists/${movieList.listId}`}
-                >
-                  <CardHeader title={movieList.title}></CardHeader>
-                  <ImageList variant="masonry" cols={3} gap={12}>
-                    {movieList.movies.slice(0, 3).map((movie) => (
-                      <ImageListItem key={movie.movieId}>
-                        <img
-                          src={`${movie.posterImage}?w=248&fit=crop&auto=format`}
-                          loading="lazy"
-                        />
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
-                </Link>
+              <Card
+                to={`http://localhost:5173/movielists/${movieList.listId}`}
+                component={Link}
+                variant="outlined"
+                style={cardStyle}
+              >
+                <CardHeader title={movieList.title}></CardHeader>
+                <ImageList variant="masonry" cols={3} gap={12}>
+                  {movieList.movies.slice(0, 3).map((movie) => (
+                    <ImageListItem key={movie.movieId}>
+                      <img
+                        src={`${movie.posterImage}?w=248&fit=crop&auto=format`}
+                        loading="lazy"
+                      />
+                    </ImageListItem>
+                  ))}
+                </ImageList>
                 <CardContent>{`created by ${movieList.user.username}`}</CardContent>
               </Card>
             </Badge>

@@ -4,10 +4,8 @@ import Director from "./DirectorComponent";
 import Actor from "./ActorComponent";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import RenderStarsComponent from "./RenderStarsComponent";
-import { useEffect } from "react";
 
 const Movie = ({ movies, editMode, removeMovie, parseDate, changeRank }) => {
-  useEffect(() => {}, [movies]);
   return movies.map((movie, index) => (
     <div key={movie.movieId} className="movie-div">
       {!editMode && (
