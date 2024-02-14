@@ -4,11 +4,15 @@ import { EditOutlined, SaveOutlined } from "@mui/icons-material";
 import {
   Button,
   ButtonGroup,
+  FormControl,
   Grid,
+  MenuItem,
   IconButton,
   Modal,
+  Select,
   TextField,
   Typography,
+  InputLabel,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -37,6 +41,8 @@ const MovieListComponent = ({ usernameProp }) => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const [sort, setSortValue] = useState("");
 
   const { listId } = useParams();
   const navigate = useNavigate();
@@ -162,6 +168,43 @@ const MovieListComponent = ({ usernameProp }) => {
     const formattedDate = currentDate.toLocaleDateString("en-AU", options);
     return formattedDate;
   };
+  useEffect(() => {
+    if (sort === "Default") {
+      setMovies(movielist.movies);
+    }
+    if (sort === "title") {
+      setMovies((movies) =>
+        [...movies].sort((a, b) => {
+          return a.title.localeCompare(b.title);
+        })
+      );
+    }
+    if (sort === "runtime") {
+      setMovies((movies) =>
+        [...movies].sort((a, b) => {
+          return a.runtime - b.runtime;
+        })
+      );
+    }
+    if (sort === "releaseDate") {
+      setMovies((movies) =>
+        [...movies].sort((a, b) => {
+          return Date.parse(a.releaseDate) - Date.parse(b.releaseDate);
+        })
+      );
+    }
+    if (sort === "rating") {
+      setMovies((movies) =>
+        [...movies].sort((a, b) => {
+          return a.rating - b.rating;
+        })
+      );
+    }
+  }, [sort, movielist.movies]);
+
+  const handleSort = (event) => {
+    setSortValue(event.target.value);
+  };
 
   const editingButtons = [
     {
@@ -173,19 +216,46 @@ const MovieListComponent = ({ usernameProp }) => {
     { id: 3, name: "Cancel", action: () => navigate(-1) },
   ];
 
+  const menuOptions = [
+    { name: "Default", value: "Default" },
+    { name: "Title ", value: "title" },
+    { name: "Runtime ", value: "runtime" },
+    { name: "Release Date ", value: "releaseDate" },
+    { name: "Rating", value: "rating" },
+  ];
+
   if (loading) {
     return <div className="list-container">...Loading</div>;
   }
   return (
     <div key={movielist.listId} className="list-container">
-      <Grid justifyContent={"end"} container>
-        <Grid>
-          {showEditIcon && (
-            <IconButton style={{ margin: "20px" }} onClick={toggleEditMode}>
+      <Grid justifyContent={"space-between"} container>
+        {showEditIcon && (
+          <Grid item>
+            <IconButton sx={{ margin: "0 20px" }} onClick={toggleEditMode}>
               <EditOutlined />
             </IconButton>
-          )}
-        </Grid>
+          </Grid>
+        )}
+        {!editingMode && (
+          <Grid item sx={{ minWidth: 200, margin: "0 20px" }}>
+            <FormControl fullWidth>
+              <InputLabel id="sort-label">Sort</InputLabel>
+              <Select
+                id="sort-label"
+                onChange={handleSort}
+                label="Sort"
+                value={sort}
+              >
+                {menuOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        )}
       </Grid>
       {editingMode && (
         <Grid spacing={4} justifyContent={"space-around"} container>
@@ -241,6 +311,7 @@ const MovieListComponent = ({ usernameProp }) => {
           </Grid>
         </Grid>
       )}
+
       {!editingMode && (
         <Grid direction={"column"} container>
           <Grid>

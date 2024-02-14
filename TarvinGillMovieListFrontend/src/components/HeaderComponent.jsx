@@ -75,7 +75,7 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Typography variant="h5">Movie List Maker</Typography>
+          <Typography variant="h4">Movie List Maker</Typography>
         </Grid>
         {bearerProp && (
           <Grid item>
