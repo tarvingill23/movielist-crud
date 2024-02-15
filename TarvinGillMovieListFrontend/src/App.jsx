@@ -77,16 +77,29 @@ function App() {
             }
           />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route
-            path="/mylists"
-            element={
-              <ViewUserListsPage
-                bearerProp={bearer}
-                userMovielistsProp={userMovielists}
-                usernameProp={username}
-              />
-            }
-          />
+          {bearer && (
+            <Route
+              path={"/mylists"}
+              element={
+                <ViewUserListsPage
+                  bearerProp={bearer}
+                  userMovielistsProp={userMovielists}
+                  usernameProp={username}
+                />
+              }
+            />
+          )}
+          {!bearer && (
+            <Route
+              path={"/mylists"}
+              element={
+                <LoginPage
+                  bearerProp={[bearer, setBearer]}
+                  usernameProp={[username, setUsername]}
+                />
+              }
+            />
+          )}
         </Routes>
       </ThemeProvider>
     </div>
