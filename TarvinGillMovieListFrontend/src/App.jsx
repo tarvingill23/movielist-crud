@@ -45,7 +45,7 @@ const theme = createTheme({
 
 function App() {
   const [bearer, setBearer] = useState("");
-  const [username, setUsername] = useState("johndoe123");
+  const [username, setUsername] = useState("");
   const [userMovielists, setUserMovielists] = useState([]);
 
   return (

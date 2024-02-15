@@ -2,7 +2,7 @@ import { Button, Grid, Modal, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
   const [openCreateList, setOpenCreateList] = createListProp;
@@ -31,9 +31,9 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
       },
     };
     axios.post(apiCreate, movielist, requestOptions).then(() => {
-      navigate("/mylists");
+      navigate("/mylists", { state: { key: "hello" } });
       handleClose();
-    }, 2000);
+    });
   };
 
   const style = {
@@ -45,7 +45,12 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
   };
   return (
     <>
-      <Button onClick={handleOpen} sx={{ margin: "6px" }}>
+      <Button
+        component={Link}
+        to="/"
+        onClick={handleOpen}
+        sx={{ margin: "6px" }}
+      >
         Create new list
       </Button>
       <Modal sx={style} open={openCreateList}>
@@ -62,7 +67,9 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
             <Button onClick={createList}>Create List</Button>
           </Grid>
           <Grid xs={6} item>
-            <Button onClick={() => handleClose()}>Cancel</Button>
+            <Button component={Link} to={-1} onClick={() => handleClose()}>
+              Cancel
+            </Button>
           </Grid>
         </Grid>
       </Modal>

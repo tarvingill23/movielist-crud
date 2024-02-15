@@ -97,6 +97,11 @@ public class DataLoader implements ApplicationRunner{
 		Movie movie10 = new Movie("The Departed", Date.valueOf("2006-10-06"), 151,
 				"An undercover cop and a mole in the police attempt to identify each other while infiltrating an Irish gang in South Boston.",
 				4, "Crime", "https://upload.wikimedia.org/wikipedia/en/5/50/Departed234.jpg");
+		
+		Movie movie11 = new Movie("Iron Man 2", Date.valueOf("2010-05-07"), 125,
+				"With the world now aware of his identity as Iron Man, Tony Stark must contend with both his declining health and a vengeful mad man with ties to his father's legacy.",
+				3, "Action",
+				"https://upload.wikimedia.org/wikipedia/en/e/ed/Iron_Man_2_poster.jpg");
 
 		// All personnel
 		Personnel person1 = new Personnel("Jon", "Favraeu");
@@ -134,6 +139,7 @@ public class DataLoader implements ApplicationRunner{
 
 		Personnel person25 = new Personnel("Martin", "Scorsese");
 		Personnel person26 = new Personnel("Leonardo", "Di", "Caprio");
+		Personnel person27 = new Personnel("Mickey", "Rourke");
 
 		// Directors
 		Director dir1 = new Director(person1);
@@ -183,6 +189,7 @@ public class DataLoader implements ApplicationRunner{
 		Actor actor18 = new Actor(person23);
 
 		Actor actor19 = new Actor(person26);
+		Actor actor20 = new Actor(person27);
 
 		// Add data to collections
 
@@ -201,6 +208,7 @@ public class DataLoader implements ApplicationRunner{
 		movies.add(movie8);
 		movies.add(movie9);
 		movies.add(movie10);
+		movies.add(movie11);
 
 		List<MovieList> movieLists = new ArrayList<MovieList>();
 		movieLists.add(list1);
@@ -234,6 +242,7 @@ public class DataLoader implements ApplicationRunner{
 		personnel.add(person24);
 		personnel.add(person25);
 		personnel.add(person26);
+		personnel.add(person27);
 
 		List<Director> directors = new ArrayList<Director>();
 		directors.add(dir1);
@@ -267,6 +276,7 @@ public class DataLoader implements ApplicationRunner{
 		actors.add(actor17);
 		actors.add(actor18);
 		actors.add(actor19);
+		actors.add(actor20);
 	
 		// Set relationships
 
@@ -294,7 +304,7 @@ public class DataLoader implements ApplicationRunner{
 		movie5.setActors(Arrays.asList(actor10, actor11));
 
 		movie6.setDirectors(Arrays.asList(dir6));
-		movie6.setActors(Arrays.asList(actor12, actor13));
+		movie6.setActors(Arrays.asList(		actor12, actor13));
 
 		movie7.setDirectors(Arrays.asList(dir7));
 		movie7.setActors(Arrays.asList(actor14, actor15));
@@ -307,6 +317,9 @@ public class DataLoader implements ApplicationRunner{
 
 		movie10.setDirectors(Arrays.asList(dir10));
 		movie10.setActors(Arrays.asList(actor7, actor19));
+		
+		movie11.setActors(Arrays.asList(actor2, actor20));
+		movie11.setDirectors(Arrays.asList(dir1));
 		
 		personnelRepo.saveAll(personnel);
 		actorRepo.saveAll(actors);

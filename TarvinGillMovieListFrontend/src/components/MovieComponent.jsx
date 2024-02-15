@@ -44,10 +44,12 @@ const Movie = ({ movies, editMode, removeMovie, parseDate, changeRank }) => {
         <p>{movie.genre}</p>
       </div>
       {editMode && (
-        <Grid>
-          <IconButton onClick={() => changeRank(index, movie, "down")}>
-            {index === 0 && movies.length > 1 && <ArrowDownwardTwoTone />}
-          </IconButton>
+        <Grid justifyContent={"end"} container>
+          <Grid item>
+            <IconButton onClick={() => changeRank(index, movie, "down")}>
+              {index === 0 && movies.length > 1 && <ArrowDownwardTwoTone />}
+            </IconButton>
+          </Grid>
           {index != 0 && index != movies.length - 1 && (
             <Grid>
               <IconButton onClick={() => changeRank(index, movie, "up")}>
@@ -58,11 +60,13 @@ const Movie = ({ movies, editMode, removeMovie, parseDate, changeRank }) => {
               </IconButton>
             </Grid>
           )}
-          <IconButton onClick={() => changeRank(index, movie, "up")}>
+          <Grid item>
             {index === movies.length - 1 && movies.length > 1 && (
-              <ArrowUpwardOutlined />
+              <IconButton onClick={() => changeRank(index, movie, "up")}>
+                <ArrowUpwardOutlined />
+              </IconButton>
             )}
-          </IconButton>
+          </Grid>
         </Grid>
       )}
     </div>

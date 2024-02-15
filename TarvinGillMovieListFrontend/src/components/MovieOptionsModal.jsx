@@ -22,7 +22,7 @@ const cardStyle = {
   width: "400px",
 };
 const dialogStyle = {
-  padding: "20px",
+  padding: "40px",
 };
 const imageStyle = {
   padding: "20px",
@@ -107,7 +107,7 @@ const MovieOptionsModal = ({
             {retrievedMovies.length > 0 &&
               retrievedMovies.map((movie) => {
                 return (
-                  <Grid key={movie.movieId} item xs={4}>
+                  <Grid key={movie.movieId} item xs={3}>
                     <Snackbar
                       open={openSnackbar}
                       autoHideDuration={5000}

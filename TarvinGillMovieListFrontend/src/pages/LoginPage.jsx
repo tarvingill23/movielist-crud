@@ -18,7 +18,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
 
   const [errorMessage, setErrorMessage] = useState();
 
-  const [password, setPassword] = useState("Password@123");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 

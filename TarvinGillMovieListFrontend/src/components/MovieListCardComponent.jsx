@@ -76,7 +76,7 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
               >
                 <CardHeader title={movieList.title}></CardHeader>
                 <ImageList variant="masonry" cols={3} gap={12}>
-                  {movieList.movies.slice(0, 3).map((movie, index) => (
+                  {movieList.movies.slice(0, 3).map((movie) => (
                     <ImageListItem key={movie.movieId}>
                       <img
                         src={`${movie.posterImage}?w=248&fit=crop&auto=format`}

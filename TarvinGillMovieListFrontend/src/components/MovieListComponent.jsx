@@ -146,7 +146,6 @@ const MovieListComponent = ({ usernameProp }) => {
       updatedMovies.splice(index - 1, 0, childMovie);
     }
     setMovies(updatedMovies);
-    console.log(updatedMovies);
   };
 
   // Load all movies
@@ -362,7 +361,10 @@ const MovieListComponent = ({ usernameProp }) => {
       )}
       {movies.length === 0 && (
         <Typography sx={{ margin: "100px 0 100px 0" }} variant="h5">
-          {editingMode ? "Add your first movie now!" : "No movies to see"}
+          {console.log(movielist.user.username, "Username")}
+          {editingMode
+            ? "Add your first movie now!"
+            : "No movies to see... yet"}
         </Typography>
       )}
 
