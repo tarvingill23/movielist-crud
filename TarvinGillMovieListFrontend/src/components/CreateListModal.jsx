@@ -10,7 +10,7 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
     if (bearerProp) {
       setOpenCreateList(true);
     } else {
-      navigate("/signup");
+      navigate("/login");
     }
   };
   const handleClose = () => setOpenCreateList(false);
@@ -31,9 +31,9 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
       },
     };
     axios.post(apiCreate, movielist, requestOptions).then(() => {
-      navigate("/mylists", { state: { key: false } });
+      navigate("/mylists");
       handleClose();
-    });
+    }, 2000);
   };
 
   const style = {

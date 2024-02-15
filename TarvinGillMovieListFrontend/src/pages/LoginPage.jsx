@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import axios from "axios";
@@ -59,6 +59,9 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
     <Grid justifyContent="center" style={style} container spacing={6}>
       <Grid item xs={12}>
         Login
+      </Grid>
+      <Grid item xs={12}>
+        <Link to={"/signup"}>Dont have an account? Sign up now!</Link>
       </Grid>
       <Grid item>
         <FormHelperText error={errorMessage != ""}>
