@@ -226,7 +226,7 @@ const MovieListComponent = ({ usernameProp }) => {
   ];
 
   const menuOptions = [
-    { name: "Default", value: "Default" },
+    { name: "User Rank", value: "Default" },
     { name: "Title ", value: "title" },
     { name: "Runtime ", value: "runtime" },
     { name: "Release Date ", value: "releaseDate" },
@@ -240,7 +240,7 @@ const MovieListComponent = ({ usernameProp }) => {
     <div key={movielist.listId} className="list-container">
       <Grid justifyContent={"end"} alignItems={"center"} container>
         {showEditIcon && (
-          <Grid xs={2} item>
+          <Grid xs={12} item>
             <IconButton sx={{ margin: "0 20px" }} onClick={toggleEditMode}>
               <EditOutlined />
             </IconButton>
@@ -358,7 +358,7 @@ const MovieListComponent = ({ usernameProp }) => {
       )}
       {movies.length === 0 && (
         <Typography sx={{ margin: "100px 0 100px 0" }} variant="h5">
-          Add your first movie now!
+          {editingMode ? "Add your first movie now!" : "No movies to see"}
         </Typography>
       )}
 

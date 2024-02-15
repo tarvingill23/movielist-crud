@@ -67,16 +67,16 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
   );
   return (
     <div style={headerStyle}>
-      <Grid columns={18} alignItems="center" container>
+      <Grid columns={12} alignItems="center" container>
         <Grid xs={2} item>
           <IconButton component={Link} to={"/"}>
             <HomeOutlined />
           </IconButton>
         </Grid>
-        <Grid xs={12} item>
+        <Grid xs={bearerProp ? 8 : 7.7} item>
           <Typography variant="h4">Movie List Maker</Typography>
         </Grid>
-        <Grid xs="auto" item>
+        <Grid xs={bearerProp ? 2 : "auto"} item>
           <CreateListModal
             bearerProp={bearerProp}
             usernameProp={usernameProp}
@@ -94,7 +94,7 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
           )}
         </Grid>
         {!bearerProp && (
-          <Grid item>
+          <Grid xs="auto" item>
             <Link style={{ margin: "8px" }} to={"/signup"}>
               <Typography variant="p">Sign Up</Typography>
             </Link>

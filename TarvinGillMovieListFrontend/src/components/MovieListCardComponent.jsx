@@ -22,8 +22,8 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
     padding: "0px 60px 0px 60px",
   };
 
-  const showBadge = (modifiedDate) => {
-    const modifiedTime = Date.parse(modifiedDate);
+  const showBadge = (date) => {
+    const modifiedTime = Date.parse(date);
     const millis = Date.now() - modifiedTime;
     const minutesElapsed = Math.floor(millis / 60000);
     if (minutesElapsed > 10) {
@@ -41,7 +41,11 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
           <Grid item xs={4} key={movieList.listId}>
             <Badge
               invisible={showBadge(movieList.dateModified)}
-              badgeContent={"Recently updated"}
+              badgeContent={
+                movieList.dateModified === movieList.dateCreated
+                  ? "Recently Created"
+                  : "Recently Updated"
+              }
               color="secondary"
             >
               <Card

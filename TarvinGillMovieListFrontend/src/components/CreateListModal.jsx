@@ -31,7 +31,7 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
       },
     };
     axios.post(apiCreate, movielist, requestOptions).then(() => {
-      navigate("/mylists  ", { state: { key: false } });
+      navigate("/mylists", { state: { key: false } });
       handleClose();
     });
   };
