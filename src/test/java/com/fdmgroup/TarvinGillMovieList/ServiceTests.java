@@ -84,6 +84,10 @@ public class ServiceTests {
 	Optional<Movie> opMovie1;
 	Optional<Movie> opMovie2;
 	
+	Optional<MovieList> opMvList1;
+	Optional<MovieList> opMvList2;
+
+	
 	Optional<Personnel> opPerson1;
 	Optional<Personnel> opPerson2;
 	Optional<Personnel> opPerson3;
@@ -95,21 +99,19 @@ public class ServiceTests {
 	Optional<Director> opDir2;
 	
 	Movie movie1;
-
 	Movie movie2;
 	
-	Director dir1;
+	MovieList mvList1;
+	MovieList mvList2;
 	
+	Director dir1;
 	Director dir2;
 	
 	Actor actor1;
-	
 	Actor actor2;
 	
 	Personnel person1;
-	
 	Personnel person2;
-	
 	Personnel person3;
 	
 	User user1;
@@ -132,6 +134,15 @@ public class ServiceTests {
 		opUser2 = Optional.of(new User("janedoe@gmail.com", "janedoe9823", "password4231"));
 		user2 = opUser2.get();
 		user2.setUserId(2);
+		
+		opMvList1 = Optional.of(new MovieList("Best movies of all time"));
+		opMvList2 = Optional.of(new MovieList("The best films of the 2010s")); 
+		
+		mvList1 = opMvList1.get();
+		mvList1.setListId(1);
+		mvList2 = opMvList2.get();
+		mvList2.setListId(2);
+		
 		
 		opMovie1 = Optional.of(new Movie("Iron Man", Date.valueOf("2008-05-02"), 126,
 				"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.",
@@ -369,8 +380,8 @@ public class ServiceTests {
 	@Test
 	public void find_all_movielists() {
 		List<MovieList> mvLists = new ArrayList<>();
-		mvLists.add(new MovieList("Best movies of all time"));
-		mvLists.add(new MovieList("My favourite films of the 2010s")); 
+		mvLists.add(mvList1);
+		mvLists.add(mvList2); 
 
 		when(mlRepo.findAll()).thenReturn(mvLists);
 
@@ -381,30 +392,56 @@ public class ServiceTests {
 		verify(mlRepo, times(1)).findAll();
 
 	}
+	
+	@Test
+	public void get_list_by_id() {
+		int listId = mvList1.getListId();
+		when(mlRepo.existsById(listId)).thenReturn(true);
+		when(mlRepo.findById(listId)).thenReturn(opMvList1);
+		
+		MovieList foundMvList = mlService.findById(listId).get();
+		assertEquals(foundMvList, mvList1);
+		verify(mlRepo, times(1)).findById(listId);
+	}
 
 	@Test
 	public void get_list_by_list_id_throws_exception_if_list_does_not_exist() {
-		int listId = 1;
+		int listId = mvList1.getListId();
 
 		Throwable exception = assertThrows(RuntimeException.class, () -> {
 			mlService.findById(listId);
 		});
 
 		assertEquals("Movie list with ID: " + listId + " not found", exception.getMessage());
-
+		
 	}
 	
 	@Test
-	public void add_new_movie_list() {
-		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+	public void find_partial_matches_for_movielists() {
+		
+		List<MovieList> mvLists = new ArrayList<>();
+		mvLists.add(mvList1);
+		mvLists.add(mvList2);
+		
+		String query = "Best";
+		
+		when(mlRepo.findPartialMatch(query)).thenReturn(mvLists);
+		
+		List<MovieList> foundLists = mlService.getPartialMatches(query);
+		assertEquals(mvLists, foundLists);
+		verify(mlRepo, times(1)).findPartialMatch(query);
+	}
+	
+	@Test
+	public void add_new_movielist() {
 		when(userRepo.findByUsername(user1.getUsername())).thenReturn(opUser1);
 		mvList1.setUser(user1);
 		mlService.createList(mvList1);
 		verify(mlRepo, times(1)).save(mvList1);
 	}
+	
 	@Test
-	public void add_new_movie_list_throws_exception() {
-		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
+	public void add_new_movielist_throws_exception() {
 		
 		mvList1.setListId(1);
 		
@@ -419,7 +456,6 @@ public class ServiceTests {
 	
 	@Test
 	public void update_list() {
-		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
 		mvList1.setListId(1);
 		
 		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
@@ -432,7 +468,6 @@ public class ServiceTests {
 	
 	@Test
 	public void update_list_throws_exception_if_id_does_not_exist() {
-		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
 		mvList1.setListId(1);
 
 		Throwable exception = assertThrows(RuntimeException.class, () -> {
@@ -444,7 +479,6 @@ public class ServiceTests {
 	
 	@Test
 	public void delete_list() {
-		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
 		mvList1.setListId(1);
 		
 		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
@@ -457,7 +491,6 @@ public class ServiceTests {
 	
 	@Test
 	public void delete_list_throws_exception_if_id_does_not_exist() {
-		MovieList mvList1 = new MovieList("My favourite films of the 2010s");
 		mvList1.setListId(1);
 
 		Throwable exception = assertThrows(RuntimeException.class, () -> {

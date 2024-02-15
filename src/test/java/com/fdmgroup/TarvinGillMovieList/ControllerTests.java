@@ -139,7 +139,7 @@ class ControllerTests {
 		user1.setUserId(1);
 		
 		opMvList1 = Optional.of(new MovieList("Best movies of all time"));
-		opMvList2 = Optional.of(new MovieList("My favourite films of the 2010s"));
+		opMvList2 = Optional.of(new MovieList("Best films of the 2010s"));
 		
 		mvList1 = opMvList1.get();
 		mvList1.setListId(1);
@@ -279,7 +279,24 @@ class ControllerTests {
 		MovieList foundList = mlController.getMovieListById(listId).get();		
 		assertEquals(foundList, mvList1);
 		verify(mlService, times(1)).findById(listId);
-	}	
+	}
+	
+	@Test
+	public void get_all_partial_matches_for_movielists() {
+		List<MovieList> mvLists = new ArrayList<>();
+		mvLists.add(mvList1);
+		mvLists.add(mvList2);
+		
+		String query = "Best";
+		
+		when(mlService.getPartialMatches(query)).thenReturn(mvLists);
+		
+		List<MovieList> foundMvLists = mlService.getPartialMatches(query);
+		assertEquals(mvLists, foundMvLists);
+		assertEquals(2,mvLists.size());
+		verify(mlService, times(1)).getPartialMatches(query);
+	}
+	
 	@Test
 	public void add_new_movielist_to_database() {
 		mlController.addMovieList(mvList1);
@@ -331,7 +348,7 @@ class ControllerTests {
 	}
 	
 	@Test
-	public void get_all_partial_matches() {
+	public void get_all_partial_matches_for_movies() {
 		Movie movie2 = new Movie("Iron Man 2", Date.valueOf("2010-05-07"), 125,
 				"With the world now aware of his identity as Iron Man, Tony Stark must contend with both his declining health and a vengeful mad man with ties to his father's legacy.",
 				3, "Action",
