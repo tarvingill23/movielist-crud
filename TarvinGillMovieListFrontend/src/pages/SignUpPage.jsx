@@ -1,7 +1,7 @@
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import validator from "validator";
 
 const SignUpPage = () => {
@@ -141,6 +141,11 @@ const SignUpPage = () => {
           label="password"
           helperText={passwordError}
         />
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="p">
+          Got an account? <Link to={"/login"}>Sign in</Link>
+        </Typography>
       </Grid>
       <Grid item xs={12}>
         <Button onClick={() => submitSignUp(event)} disabled={enableButton()}>
