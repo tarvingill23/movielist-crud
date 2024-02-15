@@ -7,13 +7,15 @@ import { Button, Grid, TextField, Typography } from "@mui/material";
 
 const HomePage = ({ usernameProp, userMovielistsProp }) => {
   const [movielists, setMovielists] = useState([]);
-  const [searchValue, setSearchValue] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [defaultMovielist, setDefaultMovielist] = useState();
 
   // eslint-disable-next-line no-unused-vars
   const [userMovielists, setUserMovielists] = userMovielistsProp;
 
   const gridStyle = {
-    marginTop: "120px",
+    padding: "40px",
+    marginTop: "100px",
   };
   const searchStyle = {
     width: "600px",
@@ -22,7 +24,7 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
     margin: "6px",
   };
 
-  const handeSearchValueChange = (event) => {
+  const handleSearchValueChange = (event) => {
     setSearchValue(event.target.value);
   };
 
@@ -30,6 +32,7 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
     const api = "api/movielists";
     axios.get(api).then((response) => {
       setMovielists(response.data);
+      setDefaultMovielist(response.data);
       setUserMovielists(
         response.data.filter(
           (movielist) => movielist.user.username === usernameProp
@@ -39,17 +42,30 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
   }, [setUserMovielists, usernameProp]);
 
   const searchByTitle = () => {
+    console.log("Ran");
     const apiSearch = `api/movielists/search?q=${searchValue}`;
     axios.get(apiSearch).then((response) => {
       setMovielists(response.data);
     });
   };
+  useEffect(() => {
+    if (searchValue?.length === 0) {
+      setMovielists(defaultMovielist);
+    }
+  }, [searchValue, defaultMovielist]);
+
+  const keyPress = (e) => {
+    if (e.keyCode == 13) {
+      searchByTitle();
+    }
+  };
 
   return (
-    <Grid rowSpacing={4} style={gridStyle} container>
+    <Grid rowSpacing={4} sx={gridStyle} container>
       <Grid item xs={12}>
         <TextField
-          onChange={() => handeSearchValueChange(event)}
+          onKeyDown={() => keyPress(event)}
+          onChange={() => handleSearchValueChange(event)}
           value={searchValue}
           sx={searchStyle}
           placeholder="Enter title"
@@ -59,13 +75,13 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
         </Button>
       </Grid>
       <Grid item xs={12}>
-        {movielists.length > 0 && (
+        {movielists && movielists.length > 0 && (
           <MovieListCardComponent
             movieLists={movielists}
             sectionTitle={"Check out these lists"}
           />
         )}
-        {movielists.length < 1 && (
+        {movielists && movielists.length < 1 && (
           <Typography variant="h2">No lists found, try again</Typography>
         )}
       </Grid>

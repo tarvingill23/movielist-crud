@@ -39,7 +39,7 @@ public class MovieListController {
 	}
 	
 	@GetMapping("/movielists/search")
-	public List<MovieList> searchByName(@RequestParam String q){
+	public List<MovieList> searchByTitle(@RequestParam String q){
 		return mlService.getPartialMatches(q);
 	}
 

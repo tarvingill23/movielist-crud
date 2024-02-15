@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { AddOutlined, CloseOutlined } from "@mui/icons-material";
 import RenderStarsComponent from "./RenderStarsComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IconButton,
   Grid,
@@ -14,7 +14,6 @@ import {
   Typography,
   Snackbar,
   TextField,
-  InputAdornment,
 } from "@mui/material";
 import axios from "axios";
 
@@ -56,9 +55,16 @@ const MovieOptionsModal = ({
     setSearchValue(event.target.value);
   };
 
-  const clearSearch = () => {
-    setSearchValue("");
-    setRetrievedMovies(movies);
+  useEffect(() => {
+    if (searchValue?.length === 0) {
+      setRetrievedMovies(movies);
+    }
+  }, [searchValue, movies]);
+
+  const keyPress = (e) => {
+    if (e.keyCode == 13) {
+      searchForMovies();
+    }
   };
 
   return (
@@ -80,10 +86,7 @@ const MovieOptionsModal = ({
           onClose={() => handleClose(setOpenDialog)}
         >
           <Toolbar>
-            <IconButton
-              onClick={() => handleClose(setOpenDialog)}
-              aria-label="close"
-            >
+            <IconButton onClick={() => handleClose(setOpenDialog)}>
               <CloseOutlined />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
@@ -91,21 +94,10 @@ const MovieOptionsModal = ({
             </Typography>
 
             <TextField
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    component={IconButton}
-                    sx={{ height: "10px", padding: "10px" }}
-                    onClick={clearSearch}
-                    position="end"
-                  >
-                    <CloseOutlined />
-                  </InputAdornment>
-                ),
-              }}
               size="small"
               sx={{ margin: "10px" }}
               placeholder="Search"
+              onKeyDown={() => keyPress(event)}
               onChange={() => handleInputChange(event)}
               value={searchValue}
             />

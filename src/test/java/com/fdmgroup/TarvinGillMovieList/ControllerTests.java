@@ -291,7 +291,7 @@ class ControllerTests {
 		
 		when(mlService.getPartialMatches(query)).thenReturn(mvLists);
 		
-		List<MovieList> foundMvLists = mlService.getPartialMatches(query);
+		List<MovieList> foundMvLists = mlController.searchByTitle(query);
 		assertEquals(mvLists, foundMvLists);
 		assertEquals(2,mvLists.size());
 		verify(mlService, times(1)).getPartialMatches(query);
@@ -361,7 +361,7 @@ class ControllerTests {
 		
 		when(movieService.getPartialMatches(query)).thenReturn(movies);
 		
-		List<Movie> foundMovies = movieService.getPartialMatches(query);
+		List<Movie> foundMovies = movieController.searchByName(query);
 		assertEquals(movies, foundMovies);
 		verify(movieService, times(1)).getPartialMatches(query);
 	}

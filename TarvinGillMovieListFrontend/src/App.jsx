@@ -16,8 +16,13 @@ const theme = createTheme({
     primary: {
       main: "#FFFFFF",
     },
+    secondary: {
+      main: "#A89932",
+    },
   },
   typography: {
+    fontFamily: `"Protest Strike", sans-serif`,
+    fontWeightMedium: "400",
     button: {
       textTransform: "none",
     },
@@ -28,12 +33,19 @@ const theme = createTheme({
         variant: "outlined",
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: {
+          color: "white",
+        },
+      },
+    },
   },
 });
 
 function App() {
   const [bearer, setBearer] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("johndoe123");
   const [userMovielists, setUserMovielists] = useState([]);
 
   return (

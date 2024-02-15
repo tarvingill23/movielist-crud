@@ -3,7 +3,13 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import axios from "axios";
-import { TextField, Grid, Button, FormHelperText } from "@mui/material";
+import {
+  TextField,
+  Grid,
+  Button,
+  FormHelperText,
+  Typography,
+} from "@mui/material";
 
 const LoginPage = ({ bearerProp, usernameProp }) => {
   // eslint-disable-next-line no-unused-vars
@@ -12,7 +18,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
 
   const [errorMessage, setErrorMessage] = useState();
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("Password@123");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,6 +34,12 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
       setUsername(location.state.key);
     }
   });
+
+  const keyPress = (e) => {
+    if (e.keyCode == 13) {
+      submitted(e);
+    }
+  };
 
   const submitted = (event) => {
     const apiLogin = "/api/auth/login";
@@ -58,7 +70,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
   return (
     <Grid justifyContent="center" style={style} container spacing={6}>
       <Grid item xs={12}>
-        Login
+        <Typography variant="h3">Login</Typography>
       </Grid>
       <Grid item xs={12}>
         <Link to={"/signup"}>Dont have an account? Sign up now!</Link>
@@ -70,6 +82,7 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           label="username"
           value={username}
@@ -79,12 +92,14 @@ const LoginPage = ({ bearerProp, usernameProp }) => {
       <Grid item xs={12}>
         <TextField
           sx={textFieldStyle}
+          onKeyDown={() => keyPress(event)}
           type="password"
           label="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
       </Grid>
+
       <Grid item xs={12}>
         <Button onClick={submitted}>Login</Button>
       </Grid>

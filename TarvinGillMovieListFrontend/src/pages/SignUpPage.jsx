@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -67,6 +67,13 @@ const SignUpPage = () => {
       setEmailError("");
     }
   };
+
+  const keyPress = (e) => {
+    if (e.keyCode == 13) {
+      submitSignUp(e);
+    }
+  };
+
   const submitSignUp = (event) => {
     event.preventDefault();
     const apiPostUser = "/api/users";
@@ -99,10 +106,11 @@ const SignUpPage = () => {
   return (
     <Grid style={style} container spacing={6}>
       <Grid item xs={12}>
-        Sign Up
+        <Typography variant="h3">Sign Up</Typography>
       </Grid>
       <Grid item xs={12}>
         <TextField
+          onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           error={usernameError != ""}
           value={username}
@@ -113,6 +121,7 @@ const SignUpPage = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           error={emailError != ""}
           value={email}
@@ -123,6 +132,7 @@ const SignUpPage = () => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           error={passwordError != ""}
           value={password}

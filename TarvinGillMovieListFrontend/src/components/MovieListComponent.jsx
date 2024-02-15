@@ -135,14 +135,18 @@ const MovieListComponent = ({ usernameProp }) => {
     }
   };
 
-  const changeRank = (newRank, initialRank, movie) => {
-    let updatedMovies = movies;
-    updatedMovies.splice(initialRank - 1, 1);
-    let moviesBefore = updatedMovies.slice(0, newRank - 1);
-    let moviesAfter = updatedMovies.slice(newRank - 1, updatedMovies.length);
-    moviesAfter.unshift(movie);
-    updatedMovies = [...moviesBefore, ...moviesAfter];
+  const changeRank = (index, childMovie, direction) => {
+    let updatedMovies = [...movies];
+    if (direction === "down") {
+      updatedMovies.splice(index, 1);
+      updatedMovies.splice(index + 1, 0, childMovie);
+    }
+    if (direction === "up") {
+      updatedMovies.splice(index, 1);
+      updatedMovies.splice(index - 1, 0, childMovie);
+    }
     setMovies(updatedMovies);
+    console.log(updatedMovies);
   };
 
   // Load all movies
