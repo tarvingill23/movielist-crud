@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.MovieRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.ConflictException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Movie;
 
@@ -36,7 +37,7 @@ public class MovieService {
 
 	public void addMovie(Movie movie) {
 		if (this.movieRepo.existsById(movie.getMovieId())) {
-			throw new NotFoundException("Movie with ID: " + movie.getMovieId() + " already exists");
+			throw new ConflictException("Movie with ID: " + movie.getMovieId() + " already exists");
 		}
 		this.movieRepo.save(movie);
 	}

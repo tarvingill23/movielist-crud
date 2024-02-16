@@ -1,6 +1,7 @@
 package com.fdmgroup.TarvinGillMovieList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,7 +24,10 @@ import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.MovieRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.PersonnelRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.BadRequestException;
+import com.fdmgroup.TarvinGillMovieList.exceptions.ConflictException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.ForbiddenException;
+import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Actor;
 import com.fdmgroup.TarvinGillMovieList.model.Director;
 import com.fdmgroup.TarvinGillMovieList.model.Movie;
@@ -192,11 +196,22 @@ public class ServiceTests {
 	 * User Service Tests
 	 * **************************************
 	 */
+	
+	@Test
+	public void check_request_body_if_password_is_null() {
+		String password = null;
+		user1.setPassword(password);
+
+		Throwable exception = assertThrows(BadRequestException.class, () -> {
+			userService.save(user1);
+		});
+		assertEquals("Password cannot be null", exception.getMessage());
+	}
 
 	@Test
 	public void test_check_if_user_exists_returns_exception() {
 		int userId = 1;
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			userService.checkUserExists(1);
 		});
 		assertEquals("User with ID: " + userId + " not found", exception.getMessage());
@@ -248,7 +263,7 @@ public class ServiceTests {
 		// user does not exist in the database
 		when(userRepository.existsById(userId)).thenReturn(false);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			userService.findById(userId);
 		});
 
@@ -272,7 +287,7 @@ public class ServiceTests {
 		// Pretend userId already exists in database
 		when(userRepository.existsById(user1.getUserId())).thenReturn(true);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(ConflictException.class, () -> {
 			userService.save(user1);
 		});
 		assertEquals("User with ID: " + user1.getUserId() + " exists", exception.getMessage());
@@ -284,7 +299,7 @@ public class ServiceTests {
 		// Pretend email already exists in database
 		when(userRepository.existsByEmail(user1.getEmail())).thenReturn(true);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(ConflictException.class, () -> {
 			userService.save(user1);
 		});
 		assertEquals("User with email " + user1.getEmail() + " already exists, please login with your associated username", exception.getMessage());
@@ -296,7 +311,7 @@ public class ServiceTests {
 		// Pretend username already exists in database
 		when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(ConflictException.class, () -> {
 			userService.save(user1);
 		});
 		assertEquals( user1.getUsername() + " has been taken, please type in another username", exception.getMessage());
@@ -321,7 +336,7 @@ public class ServiceTests {
 
 	@Test
 	public void update_user_throws_exception_if_id_does_not_exist() {
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			userService.update(user1);
 		});
 
@@ -335,10 +350,10 @@ public class ServiceTests {
 		when(userRepository.existsByUsername(user1.getUsername())).thenReturn(true);
 		when(userRepository.existsByEmail(user1.getEmail())).thenReturn(true);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(ConflictException.class, () -> {
 			userService.updateUsername(user1, user2);
 		});
-		Throwable exception2 = assertThrows(RuntimeException.class, () -> {
+		Throwable exception2 = assertThrows(ForbiddenException.class, () -> {
 			userService.updateEmail(user1, user2);
 		});
 
@@ -364,7 +379,7 @@ public class ServiceTests {
 
 	@Test
 	public void delete_user_throws_exception_if_id_does_not_exist() {
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			userService.deleteById(user1.getUserId());
 		});
 
@@ -408,7 +423,7 @@ public class ServiceTests {
 	public void get_list_by_list_id_throws_exception_if_list_does_not_exist() {
 		int listId = mvList1.getListId();
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			mlService.findById(listId);
 		});
 
@@ -447,7 +462,7 @@ public class ServiceTests {
 		
 		when(mlRepo.existsById(mvList1.getListId())).thenReturn(true);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(ConflictException.class, () -> {
 			mlService.createList(mvList1);
 		});
 
@@ -470,7 +485,7 @@ public class ServiceTests {
 	public void update_list_throws_exception_if_id_does_not_exist() {
 		mvList1.setListId(1);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			mlService.update(mvList1);
 		});
 
@@ -493,7 +508,7 @@ public class ServiceTests {
 	public void delete_list_throws_exception_if_id_does_not_exist() {
 		mvList1.setListId(1);
 
-		Throwable exception = assertThrows(RuntimeException.class, () -> {
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
 			mlService.deleteById(mvList1.getListId());
 		});
 
@@ -531,6 +546,18 @@ public class ServiceTests {
 	}
 	
 	@Test
+	public void get_movie_by_movie_id_throws_exception_if_list_does_not_exist() {
+		int movieId = movie1.getMovieId();
+		
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
+			movieService.getMovieById(movieId);
+		});
+
+		assertEquals("Movie with ID: " + movieId + " not found", exception.getMessage());
+	}
+	
+	
+	@Test
 	public void find_partial_matches_for_movies() {
 		Movie movie2 = new Movie("Iron Man 2", Date.valueOf("2010-05-07"), 125,
 				"With the world now aware of his identity as Iron Man, Tony Stark must contend with both his declining health and a vengeful mad man with ties to his father's legacy.",
@@ -556,6 +583,21 @@ public class ServiceTests {
 		movieService.addMovie(movie1);
 		verify(movieRepo, times(1)).save(movie1);
 	}
+	
+	@Test
+	public void add_new_movie_throws_exception() {
+		
+		int id = movie1.getMovieId();
+		
+		when(movieRepo.existsById(id)).thenReturn(true);
+
+		Throwable exception = assertThrows(ConflictException.class, () -> {
+			movieService.addMovie(movie1);
+		});
+
+		assertEquals("Movie with ID: " + id + " already exists",exception.getMessage());
+	}
+	
 	@Test
 	public void update_movie() {
 		int id = movie1.getMovieId();
@@ -565,12 +607,41 @@ public class ServiceTests {
 		movieService.updateMovie(movie1);
 		verify(movieRepo, times(1)).save(movie1);
 	}
+	
+	@Test
+	public void update_movie_throws_exception() {
+		
+		int id = movie1.getMovieId();
+		
+		when(movieRepo.existsById(id)).thenReturn(false);
+
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
+			movieService.updateMovie(movie1);
+		});
+
+		assertEquals("Movie with ID: " + id + " not found",exception.getMessage());
+	}
+	
 	@Test
 	public void delete_movie_by_id() {
 		int id = movie1.getMovieId();
 		when(movieRepo.existsById(id)).thenReturn(true);
 		movieService.deleteMovie(id);
 		verify(movieRepo, times(1)).deleteById(id);
+	}
+	
+	@Test
+	public void delete_movie_throws_exception() {
+		
+		int id = movie1.getMovieId();
+		
+		when(movieRepo.existsById(id)).thenReturn(false);
+
+		Throwable exception = assertThrows(NotFoundException.class, () -> {
+			movieService.deleteMovie(id);
+		});
+
+		assertEquals("Movie with ID: " + id + " not found",exception.getMessage());
 	}
 	
 	/**	 * **************************************

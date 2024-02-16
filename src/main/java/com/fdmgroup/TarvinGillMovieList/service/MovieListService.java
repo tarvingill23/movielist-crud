@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.fdmgroup.TarvinGillMovieList.dal.MovieListRepository;
 import com.fdmgroup.TarvinGillMovieList.dal.UserRepository;
+import com.fdmgroup.TarvinGillMovieList.exceptions.ConflictException;
 import com.fdmgroup.TarvinGillMovieList.exceptions.NotFoundException;
 import com.fdmgroup.TarvinGillMovieList.model.Movie;
 import com.fdmgroup.TarvinGillMovieList.model.MovieList;
@@ -23,7 +24,7 @@ public class MovieListService {
 	public MovieListService(MovieListRepository mlRepo, UserRepository userRepo) {
 		super();
 		this.mlRepo = mlRepo;
-		this.userRepo = userRepo;
+		this.userRepo = userRepo; 
 	}
 
 	public List<MovieList> findAll() {
@@ -41,7 +42,7 @@ public class MovieListService {
 	
 	public void createList(MovieList mvList) {
 		if (mlRepo.existsById(mvList.getListId())) {
-			throw new NotFoundException("Movie list with ID: " + mvList.getListId()
+			throw new ConflictException("Movie list with ID: " + mvList.getListId()
 					+ " exists");
 		}
 		
