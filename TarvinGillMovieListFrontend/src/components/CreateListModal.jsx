@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
   const [openCreateList, setOpenCreateList] = createListProp;
+
   const handleOpen = () => {
     if (bearerProp) {
       setOpenCreateList(true);
@@ -31,7 +32,7 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
       },
     };
     axios.post(apiCreate, movielist, requestOptions).then(() => {
-      navigate("/mylists", { state: { key: "hello" } });
+      navigate("/mylists");
       handleClose();
     });
   };
@@ -40,14 +41,14 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
     display: "flex",
     padding: "100px",
     backgroundColor: "black",
-    opacity: "0.95",
+    opacity: "1",
     zIndex: 9999,
   };
   return (
     <>
       <Button
         component={Link}
-        to="/"
+        to="/login"
         onClick={handleOpen}
         sx={{ margin: "6px" }}
       >

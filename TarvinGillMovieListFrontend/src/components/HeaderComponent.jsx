@@ -1,4 +1,4 @@
-import { AccountCircle, HomeOutlined } from "@mui/icons-material";
+import { AccountCircle } from "@mui/icons-material";
 import CreateListModal from "./CreateListModal";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -69,9 +69,7 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
     <div style={headerStyle}>
       <Grid columns={12} alignItems="center" container>
         <Grid xs={2} item>
-          <IconButton component={Link} to={"/"}>
-            <HomeOutlined />
-          </IconButton>
+          <Link to={"/"}>Home</Link>
         </Grid>
         <Grid xs={bearerProp ? 8 : 7.7} item>
           <Typography variant="h4">Movie List Maker</Typography>

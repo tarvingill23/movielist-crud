@@ -62,7 +62,6 @@ class ControllerTests {
 	 * Controllers
 	 */
 	
-
 	UserController userController;
 	
 	MovieListController mlController;
@@ -74,7 +73,6 @@ class ControllerTests {
 	ActorController actorController;
 	
 	DirectorController directorController;
-	
 	
 	
 	//Optionals

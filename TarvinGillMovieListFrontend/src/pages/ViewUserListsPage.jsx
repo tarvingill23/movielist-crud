@@ -12,15 +12,19 @@ const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
 
   useEffect(() => {
     axios.get("api/movielists").then((response) => {
-      setMovielists(response.data);
+      const filteredMovielists = [];
+      response.data.filter((movielist) => {
+        if (movielist.user.username === usernameProp) {
+          filteredMovielists.push(movielist);
+        }
+      });
+      setMovielists(filteredMovielists);
     });
-  }, [userMovielistsProp]);
+  }, [userMovielistsProp, usernameProp]);
 
-  // useEffect(() => {
-  //   navigate(`api/movielists/${}`)
-  // })
   return (
     <Grid style={style} container>
+      {console.log(movielists, "Movielists")}
       {bearerProp && movielists.length > 1 && (
         <Grid xs={12} item>
           <Typography variant="h3">{`${usernameProp} lists`}</Typography>

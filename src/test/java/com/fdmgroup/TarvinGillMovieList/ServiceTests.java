@@ -41,11 +41,11 @@ import com.fdmgroup.TarvinGillMovieList.service.UserService;
 public class ServiceTests {
 
 	@Mock
-	private UserRepository userRepository;
-
-	@Mock
 	private PasswordEncoder passwordEncoder;
 	
+	@Mock
+	private UserRepository userRepository;
+
 	@Mock
 	private MovieListRepository mlRepo;
 	

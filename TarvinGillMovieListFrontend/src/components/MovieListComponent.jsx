@@ -361,7 +361,6 @@ const MovieListComponent = ({ usernameProp }) => {
       )}
       {movies.length === 0 && (
         <Typography sx={{ margin: "100px 0 100px 0" }} variant="h5">
-          {console.log(movielist.user.username, "Username")}
           {editingMode
             ? "Add your first movie now!"
             : "No movies to see... yet"}
