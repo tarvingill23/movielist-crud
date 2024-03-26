@@ -50,7 +50,7 @@ const MovieListComponent = ({ usernameProp }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const [sort, setSortValue] = useState("");
+  const [sort, setSortValue] = useState("Default");
 
   const { listId } = useParams();
   const navigate = useNavigate();
@@ -229,7 +229,7 @@ const MovieListComponent = ({ usernameProp }) => {
   ];
 
   const menuOptions = [
-    { name: "User Rank", value: "Default" },
+    { name: "List Owner's Rank", value: "Default" },
     { name: "Title ", value: "title" },
     { name: "Runtime ", value: "runtime" },
     { name: "Release Date ", value: "releaseDate" },

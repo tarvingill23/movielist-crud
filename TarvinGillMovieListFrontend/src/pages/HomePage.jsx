@@ -14,11 +14,10 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
   const [userMovielists, setUserMovielists] = userMovielistsProp;
 
   const gridStyle = {
-    padding: "40px",
     marginTop: "100px",
   };
   const searchStyle = {
-    width: "600px",
+    width: "400px",
   };
   const buttonStyle = {
     margin: "6px",
@@ -42,7 +41,6 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
   }, [setUserMovielists, usernameProp]);
 
   const searchByTitle = () => {
-    console.log("Ran");
     const apiSearch = `api/movielists/search?q=${searchValue}`;
     axios.get(apiSearch).then((response) => {
       setMovielists(response.data);
@@ -62,7 +60,7 @@ const HomePage = ({ usernameProp, userMovielistsProp }) => {
 
   return (
     <Grid rowSpacing={4} sx={gridStyle} container>
-      <Grid item xs={12}>
+      <Grid md={12} item xs={12}>
         <TextField
           onKeyDown={() => keyPress(event)}
           onChange={() => handleSearchValueChange(event)}

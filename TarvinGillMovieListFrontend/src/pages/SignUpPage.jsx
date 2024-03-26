@@ -8,8 +8,10 @@ const SignUpPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
 
@@ -24,7 +26,12 @@ const SignUpPage = () => {
   };
 
   const enableButton = () => {
-    if (usernameError === "" && passwordError === "" && emailError === "") {
+    if (
+      usernameError === "" &&
+      passwordError === "" &&
+      emailError === "" &&
+      confirmPasswordError === ""
+    ) {
       if (username != "" && password != "" && email != "") {
         return false;
       }
@@ -47,6 +54,15 @@ const SignUpPage = () => {
       setPasswordError(
         "Password must beat least 8 characters and contain 1 uppercase letter, 1 symbol and 1 number"
       );
+    }
+  };
+
+  const validateConfirmPassword = (value) => {
+    setConfirmPassword(value);
+    if (password === value) {
+      setConfirmPasswordError("");
+    } else {
+      setConfirmPasswordError("Passwords do not match");
     }
   };
 
@@ -113,6 +129,7 @@ const SignUpPage = () => {
           onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           error={usernameError != ""}
+          color={usernameError === "" ? "success" : "error"}
           value={username}
           onChange={(event) => validateUsername(event.target.value)}
           label="username"
@@ -124,6 +141,7 @@ const SignUpPage = () => {
           onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           error={emailError != ""}
+          color={emailError === "" ? "success" : "error"}
           value={email}
           onChange={(event) => validateEmail(event.target.value)}
           label="email"
@@ -135,11 +153,25 @@ const SignUpPage = () => {
           onKeyDown={() => keyPress(event)}
           sx={textFieldStyle}
           error={passwordError != ""}
+          color={passwordError === "" ? "success" : "error"}
           value={password}
           onChange={(event) => validatePassword(event.target.value)}
           type="password"
           label="password"
           helperText={passwordError}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          onKeyDown={() => keyPress(event)}
+          sx={textFieldStyle}
+          error={confirmPasswordError != ""}
+          color={confirmPasswordError === "" ? "success" : "error"}
+          value={confirmPassword}
+          onChange={(event) => validateConfirmPassword(event.target.value)}
+          type="password"
+          label="confirm password"
+          helperText={confirmPasswordError}
         />
       </Grid>
       <Grid item xs={12}>

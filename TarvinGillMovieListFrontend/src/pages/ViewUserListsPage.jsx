@@ -3,9 +3,11 @@ import MovieListCardComponent from "../components/MovieListCardComponent";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CreateListModal from "../components/CreateListModal";
 
 const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
   const [movielists, setMovielists] = useState(userMovielistsProp);
+  const [openCreateList, setOpenCreateList] = useState(false);
   const style = {
     marginTop: "100px",
   };
@@ -23,16 +25,20 @@ const ViewUserLists = ({ bearerProp, userMovielistsProp, usernameProp }) => {
   }, [userMovielistsProp, usernameProp]);
 
   return (
-    <Grid style={style} container>
-      {console.log(movielists, "Movielists")}
-      {bearerProp && movielists.length > 1 && (
+    <Grid rowSpacing={6} style={style} container>
+      {bearerProp && (
         <Grid xs={12} item>
           <Typography variant="h3">{`${usernameProp} lists`}</Typography>
         </Grid>
       )}
       {bearerProp && movielists.length < 1 && (
         <Grid xs={12} item>
-          <Typography variant="h3">{"No lists to see"}</Typography>
+          <CreateListModal
+            bearerProp={bearerProp}
+            usernameProp={usernameProp}
+            createListProp={[openCreateList, setOpenCreateList]}
+            buttonTitle={"Create Your First List"}
+          />
         </Grid>
       )}
       <Grid item xs={12}>

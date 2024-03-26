@@ -79,6 +79,7 @@ const HeaderComponent = ({ bearerProp, usernameProp }) => {
             bearerProp={bearerProp}
             usernameProp={usernameProp}
             createListProp={[openCreateList, setOpenCreateList]}
+            buttonTitle={"Create List"}
           />
           {bearerProp && (
             <>

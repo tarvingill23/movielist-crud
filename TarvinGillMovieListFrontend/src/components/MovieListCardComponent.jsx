@@ -54,7 +54,7 @@ const MovieListCardComponent = ({ movieLists, sectionTitle }) => {
       </Grid>
       {movieLists.map((movieList) => {
         return (
-          <Grid item xs={4} key={movieList.listId}>
+          <Grid item md={4} xs={12} key={movieList.listId}>
             <Badge
               invisible={showBadge(movieList.dateModified)}
               badgeContent={

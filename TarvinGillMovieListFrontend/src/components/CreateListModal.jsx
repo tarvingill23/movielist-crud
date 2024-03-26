@@ -4,17 +4,24 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
+const CreateListModal = ({
+  createListProp,
+  usernameProp,
+  bearerProp,
+  buttonTitle,
+}) => {
   const [openCreateList, setOpenCreateList] = createListProp;
-
   const handleOpen = () => {
-    if (bearerProp) {
+    if (bearerProp != "") {
       setOpenCreateList(true);
     } else {
       navigate("/login");
     }
   };
-  const handleClose = () => setOpenCreateList(false);
+  const handleClose = () => {
+    setOpenCreateList(false);
+  };
+
   const [title, setTitle] = useState("");
   let navigate = useNavigate();
 
@@ -46,13 +53,8 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
   };
   return (
     <>
-      <Button
-        component={Link}
-        to="/login"
-        onClick={handleOpen}
-        sx={{ margin: "6px" }}
-      >
-        Create new list
+      <Button onClick={handleOpen} sx={{ margin: "6px" }}>
+        {buttonTitle}
       </Button>
       <Modal sx={style} open={openCreateList}>
         <Grid textAlign={"center"} justifyContent={"center"} container>
@@ -61,14 +63,14 @@ const CreateListModal = ({ createListProp, usernameProp, bearerProp }) => {
               sx={{ width: "600px" }}
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              placeholder="List title"
+              placeholder="List Title"
             ></TextField>
           </Grid>
           <Grid xs={6} item>
             <Button onClick={createList}>Create List</Button>
           </Grid>
           <Grid xs={6} item>
-            <Button component={Link} to={-1} onClick={() => handleClose()}>
+            <Button component={Link} onClick={() => handleClose()}>
               Cancel
             </Button>
           </Grid>
@@ -81,6 +83,7 @@ CreateListModal.propTypes = {
   createListProp: PropTypes.array,
   bearerProp: PropTypes.string,
   usernameProp: PropTypes.string,
+  buttonTitle: PropTypes.string,
 };
 
 export default CreateListModal;
